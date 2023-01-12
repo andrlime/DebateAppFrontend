@@ -57,7 +57,7 @@ const Home: NextPage = () => {
     if(!array) {
       setSortColumn(sortColumnIndex);
       setIsAsc(!isAscending);
-      let sortedList = judges.sort((a,b) => (sortFunction(a, judges)-sortFunction(b, judges)) * multiplierAsc);
+      let sortedList = sortColumnIndex==4 || sortColumnIndex==5 ? judges.sort((a,b) => (sortFunction(a,judges)-sortFunction(b,judges)) * multiplierAsc) : judges.sort((a,b) => (sortFunction(a)-sortFunction(b)) * multiplierAsc);
       setJudges(sortedList);
     } else {
       setSortColumn(sortColumnIndex);
@@ -144,7 +144,7 @@ const Home: NextPage = () => {
               <td style={{backgroundColor: "#b81818"}}>Delete</td>
             </tr>
 
-            {auth ? (judges.filter(element => element.email.toLowerCase().includes(filter) || element.name.toLowerCase().includes(filter))).map(element=>(
+            {auth ? <>{(judges.filter(element => element.email.toLowerCase().includes(filter) || element.name.toLowerCase().includes(filter))).map(element=>(
               <tr key={element._id.toString()}>
                 <td>{element.name}</td>
                 <td>{element.email}</td>
@@ -161,7 +161,28 @@ const Home: NextPage = () => {
                 <Link href={element._id!="REFRESH TO SEE" ? `/judge?judgeId=${element._id}&auth=true` : ''} as={element._id!="REFRESH TO SEE" ? `/judge` : ''}><td id={styles.customrow} style={{width: "10%", padding: "0.3rem"}}>&rarr;</td></Link>
                 <td style={{width: "10%"}}><DeleteButton callback={deleteButtonCallback} id={element._id.toString()} deleteMessage={"Delete Judge"}/></td>
               </tr>
-            )) : <tr><td colSpan={12}>Please log in</td></tr>}
+            ))}<tr>
+                <td style={{backgroundColor: "#0e397a", color: "white", fontWeight: 600}} colSpan={2}>Overall Average</td>
+                <td style={{backgroundColor: "#0e397a", color: "white", fontWeight: 600}}>
+                {Math.round(1000*(judges.reduce((accum, current) => accum + computeMeanDecision(current),0)/judges.length))/1000}
+                </td>
+                <td style={{backgroundColor: "#0e397a", color: "white", fontWeight: 600}}>
+                {Math.round(1000*(judges.reduce((accum, current) => accum + computeMeanComparison(current),0)/judges.length))/1000}
+                </td>
+                <td style={{backgroundColor: "#0e397a", color: "white", fontWeight: 600}}>
+                {Math.round(1000*(judges.reduce((accum, current) => accum + computeMeanCitation(current),0)/judges.length))/1000}
+                </td>
+                <td style={{backgroundColor: "#0e397a", color: "white", fontWeight: 600}}>
+                {Math.round(1000*(judges.reduce((accum, current) => accum + computeMeanCoverage(current),0)/judges.length))/1000}
+                </td>
+                <td style={{backgroundColor: "#0e397a", color: "white", fontWeight: 600}}>
+                {Math.round(1000*(judges.reduce((accum, current) => accum + computeMeanBias(current),0)/judges.length))/1000}
+                </td>
+                <td style={{backgroundColor: "#0e397a", color: "white", fontWeight: 600}}>
+                {Math.round(1000*(judges.reduce((accum, current) => accum + computeMean(current),0)/judges.length))/1000}
+                </td>
+                <td style={{backgroundColor: "#0e397a", color: "white", fontWeight: 600}} colSpan={4}></td>
+              </tr></> : <tr><td colSpan={12}>Please log in</td></tr>}
             </tbody>
           </table>) : error}
 

@@ -136,7 +136,8 @@ export const computeMean = (j: Judge, f?: string[]): number => {
       wtotal += ev.weight;
     }
 
-    return wsum / wtotal;
+    let result = wsum / wtotal;
+    return isNaN(result) ? 0 : result;
   }
 };
 
@@ -171,7 +172,8 @@ export const computeMeanDecision = (j: Judge, f?: string[]): number => {
       wtotal += ev.weight;
     }
 
-    return wsum / wtotal;
+    let result = wsum / wtotal;
+    return isNaN(result) ? 0 : result;
   }
 };
 
@@ -206,7 +208,8 @@ export const computeMeanCoverage = (j: Judge, f?: string[]): number => {
       wtotal += ev.weight;
     }
 
-    return wsum / wtotal;
+    let result = wsum / wtotal;
+    return isNaN(result) ? 0 : result;
   }
 };
 
@@ -241,7 +244,8 @@ export const computeMeanCitation = (j: Judge, f?: string[]): number => {
       wtotal += ev.weight;
     }
 
-    return wsum / wtotal;
+    let result = wsum / wtotal;
+    return isNaN(result) ? 0 : result;
   }
 };
 
@@ -276,7 +280,8 @@ export const computeMeanComparison = (j: Judge, f?: string[]): number => {
       wtotal += ev.weight;
     }
 
-    return wsum / wtotal;
+    let result = wsum / wtotal;
+    return isNaN(result) ? 0 : result;
   }
 };
 
@@ -311,6 +316,7 @@ export const computeMeanBias = (j: Judge, f?: string[]): number => {
       wtotal += ev.weight;
     }
 
-    return wsum / wtotal;
+    let result = wsum / wtotal;
+    return isNaN(result) ? 0 : result;
   }
 };
