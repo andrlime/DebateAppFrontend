@@ -24,7 +24,7 @@ export const EvalUploadArea: FunctionComponent<{addEval: Function, judge: Judge}
     const exportRatings = (j: Judge): string => {
       let data = "tournamentName,roundName,divisionName,isImprovement,isPrelim,coverage,citation,comparison,decision,bias\n"; // rewrite this line
       return j.evaluations.reduce((accum, e) => 
-        accum+`${e.tournamentName},${e.roundName},${e.isImprovement},${e.isPrelim},${e.coverage},${e.citation},${e.comparison},${e.decision},${e.bias}\n`,
+        accum+`${e.tournamentName},${e.roundName},${e.divisionName},${e.isImprovement},${e.isPrelim},${e.coverage},${e.citation},${e.comparison},${e.decision},${e.bias}\n`,
         data
       );
     }
