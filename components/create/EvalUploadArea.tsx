@@ -16,13 +16,13 @@ export const EvalUploadArea: FunctionComponent<{addEval: Function, judge: Judge}
         if(line.indexOf(",")==-1) return;
         let data = line.split(",");
         const trueish: string[] = ["yes", "true", "oui", "si", "y", "t"];
-        allEvals.push({tournamentName: data[0], date: new Date().toString(), roundName: data[1], isPrelim: trueish.includes(data[3].toLowerCase()), isImprovement: trueish.includes(data[2].toLowerCase()), decision: parseFloat(data[7]), comparison: parseFloat(data[6]), citation: parseFloat(data[5]), coverage: parseFloat(data[4]), bias: parseFloat(data[8]), weight: 1});
+        allEvals.push({tournamentName: data[0], date: new Date().toString(), roundName: data[1], divisionName: data[2], isPrelim: trueish.includes(data[3].toLowerCase()), isImprovement: trueish.includes(data[2].toLowerCase()), decision: parseFloat(data[7]), comparison: parseFloat(data[6]), citation: parseFloat(data[5]), coverage: parseFloat(data[4]), bias: parseFloat(data[8]), weight: 1});
       }
       addEval(allEvals);
     }
 
     const exportRatings = (j: Judge): string => {
-      let data = "tournamentName,roundName,isImprovement,isPrelim,coverage,citation,comparison,decision,bias\n"; // rewrite this line
+      let data = "tournamentName,roundName,divisionName,isImprovement,isPrelim,coverage,citation,comparison,decision,bias\n"; // rewrite this line
       return j.evaluations.reduce((accum, e) => 
         accum+`${e.tournamentName},${e.roundName},${e.isImprovement},${e.isPrelim},${e.coverage},${e.citation},${e.comparison},${e.decision},${e.bias}\n`,
         data
@@ -37,7 +37,7 @@ export const EvalUploadArea: FunctionComponent<{addEval: Function, judge: Judge}
     }
 
     const downloadTemplate = () => {
-      let data = "tournamentName,roundName,isImprovement,isPrelim,coverage,citation,comparison,decision,bias\n"; // rewrite this line
+      let data = "tournamentName,roundName,divisionName,isImprovement,isPrelim,coverage,citation,comparison,decision,bias\n"; // rewrite this line
       data = 'data:text/csv;charset=utf-8,' + encodeURI(data);
       let fileName = `evaluations_template.csv`;
       saveAs(data, fileName)
