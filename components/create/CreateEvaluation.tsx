@@ -18,6 +18,7 @@ export const CreateEvaluation: FunctionComponent<{callback: Function, judge: Jud
     const [bias, setBias] = useState(0);
   
     const [improvement, setImprovement] = useState(false);
+    const [division, setDivision] = useState("");
   
     const backendUrl = useRef("");
     const apiKey = useRef("");
@@ -54,6 +55,7 @@ export const CreateEvaluation: FunctionComponent<{callback: Function, judge: Jud
         console.log(ev);
         let body = {
           tName: ev.isImprovement ? "Improvement Round" : ev.tournamentName,
+          dName: ev.isImprovement ? "None" : division,
           date: "",
           rName: ev.isImprovement ? "Improvement Round" : `${ev.roundName}`, // e.g., Round 1 Flight A etc.
           isPrelim: ev.roundName.indexOf("Round")!=-1&&!ev.isImprovement, // ignores input
@@ -90,6 +92,14 @@ export const CreateEvaluation: FunctionComponent<{callback: Function, judge: Jud
           <option value={"Semifinals"}>Semifinals</option>
           <option value={"Grand Finals"}>Grand Finals</option>
           </select></div>
+        <div style={{margin: "0.15rem"}}>Division: <select disabled={improvement}  value={division} onChange={(e) => {setDivision(e.target.value)}} style={{width: "100%"}}>
+          <option value={"None"}>None</option>
+          <option value={"Novice"}>Novice</option>
+          <option value={"Middle School"}>Middle School</option>
+          <option value={"Open"}>Open</option>
+          <option value={"Mixed"}>Mixed</option>
+          </select></div>
+
         <div style={{margin: "0.15rem"}}>Flight: <select disabled={improvement}  value={flight} onChange={(e) => {setFlight(e.target.value)}} style={{width: "100%"}}>
           <option value={"A"}>A</option>
           <option value={"B"}>B</option>
@@ -142,6 +152,7 @@ export const CreateEvaluation: FunctionComponent<{callback: Function, judge: Jud
         <button onClick={(_) => {
           let body = {
             tName: improvement ? "Improvement Round" : tournament,
+            dName: improvement ? "None" : division,
             rName: improvement ? "Improvement Round" : `${round} Flight ${flight}`, // e.g., Round 1 Flight A etc.
             isPrelim: round.indexOf("Round")!=-1&&!improvement,
             isImprovement: improvement,
@@ -156,6 +167,7 @@ export const CreateEvaluation: FunctionComponent<{callback: Function, judge: Jud
   
           callback({
             tournamentName: improvement ? "Improvement Round" : tournament,
+            division: improvement ? "None" : division,
             date: "",
             roundName: improvement ? "Improvement Round" : `${round} Flight ${flight}`, // e.g., Round 1 Flight A etc.
             isPrelim: round.indexOf("Round")!=-1&&!improvement,

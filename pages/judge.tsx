@@ -156,6 +156,7 @@ const Home: NextPage = () => {
                   <td style={{width:"4%"}}>Date</td>
                   <td style={{width:"8%"}}>Tournament Name</td>                  
                   <td style={{width:"8%"}}>Round Name</td>
+                  <td style={{width:"8%"}}>Division</td>
 
                   <td style={{width:"13%"}}>Decision</td>
                   <td style={{width:"13%"}}>Comparison</td>
@@ -170,6 +171,7 @@ const Home: NextPage = () => {
                     <td style={{background: filter.includes(element.tournamentName) ? "" : "#d9d9d9"}}>{element.date.toString() || ""}</td>
                     <td style={{background: filter.includes(element.tournamentName) ? "" : "#d9d9d9"}}>{element.tournamentName}</td>
                     <td style={{background: filter.includes(element.tournamentName) ? "" : "#d9d9d9"}}>{element.roundName}</td>
+                    <td style={{background: filter.includes(element.tournamentName) ? "" : "#d9d9d9"}}>{element.divisionName || "None"}</td>
 
                     <td style={{background: filter.includes(element.tournamentName) ? "" : "#d9d9d9"}}>{element.decision}</td>
                     <td style={{background: filter.includes(element.tournamentName) ? "" : "#d9d9d9"}}>{element.comparison}</td>
@@ -180,11 +182,11 @@ const Home: NextPage = () => {
 
                     <td style={{width: "10%"}}><DeleteButton callback={deleteButtonCallback} id={index} deleteMessage={"Delete Evaluation"}/></td>
                   </tr>
-                )) : <tr><td colSpan={10}>Please log in</td></tr>}
+                )) : <tr><td colSpan={11}>Please log in</td></tr>}
                 {auth ? (
                   <tr>
 
-                  <td colSpan={3} style={rowCss}></td>
+                  <td colSpan={4} style={rowCss}></td>
 
                   <td style={rowCss}>{Math.round(100*computeMeanDecision(judge!, filter))/100}</td>
                   <td style={rowCss}>{Math.round(100*computeMeanComparison(judge!, filter))/100}</td>
