@@ -40,10 +40,12 @@ const Home: NextPage = () => {
       // replace later
       axios.get(`http${backendUrl.current.indexOf('localhost')!=-1 ? "" : "s"}://${backendUrl.current}/get/judge/${apiKey.current}/${query.judgeId || ""}`).then((res) => {
         let j = (res.data.result);
-        j.evaluations = j.evaluations.sort((a: Evaluation, b: Evaluation) => (new Date(a.date).toString()) < (new Date(b.date).toString()) ? 1 : -1);
-        setJudge(j);
-        setFilter(findFourMostRecents(j));
-        setLoaded(true);
+        if(j.evaluations) {
+          j.evaluations = j.evaluations.sort((a: Evaluation, b: Evaluation) => (new Date(a.date).toString()) < (new Date(b.date).toString()) ? 1 : -1);
+          setJudge(j);
+          setFilter(findFourMostRecents(j));
+          setLoaded(true);
+        }
       });
       
       if(query.auth) {
@@ -100,7 +102,7 @@ const Home: NextPage = () => {
     datasets: [
       {
         label: 'Overall Rating',
-        data: extract(),
+        data: extract()?.reverse(),
         borderColor: 'rgb(255, 99, 132)',
         backgroundColor: 'rgba(255, 99, 132, 0.5)'
       }
@@ -124,7 +126,7 @@ const Home: NextPage = () => {
     setFilter(findFourMostRecents(newJudge));
     setJudge(newJudge);
     // call API route to delete the judge from the database
-    axios.delete(`http${backendUrl.current.indexOf('localhost')!=-1 ? "" : "s"}://${backendUrl.current}/delete/evaluation/${apiKey.current}`, {data: {judgeid: query.judgeId, index: e}}).then((_) => {})
+    axios.delete(`http${backendUrl.current.indexOf('localhost')!=-1 ? "" : "s"}://${backendUrl.current}/delete/evaluation/${apiKey.current}`, {data: {judgeid: query.judgeId, index: j.length - e}}).then((_) => {})
 
   }
 

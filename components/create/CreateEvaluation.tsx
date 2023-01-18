@@ -55,7 +55,7 @@ export const CreateEvaluation: FunctionComponent<{callback: Function, judge: Jud
         console.log(ev);
         let body = {
           tName: ev.isImprovement ? "Improvement Round" : ev.tournamentName,
-          dName: ev.isImprovement ? "None" : division,
+          dName: ev.isImprovement ? "N/A" : division,
           date: "",
           rName: ev.isImprovement ? "Improvement Round" : `${ev.roundName}`, // e.g., Round 1 Flight A etc.
           isPrelim: ev.roundName.indexOf("Round")!=-1&&!ev.isImprovement, // ignores input
@@ -93,7 +93,7 @@ export const CreateEvaluation: FunctionComponent<{callback: Function, judge: Jud
           <option value={"Grand Finals"}>Grand Finals</option>
           </select></div>
         <div style={{margin: "0.15rem"}}>Division: <select disabled={improvement}  value={division} onChange={(e) => {setDivision(e.target.value)}} style={{width: "100%"}}>
-          <option value={"None"}>None</option>
+          <option disabled value={"N/A"}>N/A</option>
           <option value={"Novice"}>Novice</option>
           <option value={"Middle School"}>Middle School</option>
           <option value={"Open"}>Open</option>
@@ -152,7 +152,7 @@ export const CreateEvaluation: FunctionComponent<{callback: Function, judge: Jud
         <button onClick={(_) => {
           let body = {
             tName: improvement ? "Improvement Round" : tournament,
-            dName: improvement ? "None" : division,
+            dName: improvement ? "N/A" : division,
             rName: improvement ? "Improvement Round" : `${round} Flight ${flight}`, // e.g., Round 1 Flight A etc.
             isPrelim: round.indexOf("Round")!=-1&&!improvement,
             isImprovement: improvement,
@@ -164,10 +164,10 @@ export const CreateEvaluation: FunctionComponent<{callback: Function, judge: Jud
             weight: 1,
             date: new Date()
           };
-  
+
           callback({
             tournamentName: improvement ? "Improvement Round" : tournament,
-            division: improvement ? "None" : division,
+            divisionName: improvement ? "N/A" : division,
             date: "",
             roundName: improvement ? "Improvement Round" : `${round} Flight ${flight}`, // e.g., Round 1 Flight A etc.
             isPrelim: round.indexOf("Round")!=-1&&!improvement,
