@@ -16,9 +16,11 @@ export const CreateEvaluation: FunctionComponent<{callback: Function, judge: Jud
     const [cit, setCit] = useState(0);
     const [cov, setCov] = useState(0);
     const [bias, setBias] = useState(0);
+
+    const [impNumber, setImpNumber] = useState(1);
   
     const [improvement, setImprovement] = useState(false);
-    const [division, setDivision] = useState("");
+    const [division, setDivision] = useState("Novice");
   
     const backendUrl = useRef("");
     const apiKey = useRef("");
@@ -57,7 +59,7 @@ export const CreateEvaluation: FunctionComponent<{callback: Function, judge: Jud
           tName: ev.isImprovement ? "Improvement Round" : ev.tournamentName,
           dName: ev.isImprovement ? "N/A" : division,
           date: "",
-          rName: ev.isImprovement ? "Improvement Round" : `${ev.roundName}`, // e.g., Round 1 Flight A etc.
+          rName: ev.isImprovement ? `Improvement Round #${impNumber}` : `${ev.roundName}`, // e.g., Round 1 Flight A etc.
           isPrelim: ev.roundName.indexOf("Round")!=-1&&!ev.isImprovement, // ignores input
           isImprovement: ev.isImprovement,
           decision: ev.decision,
@@ -104,6 +106,9 @@ export const CreateEvaluation: FunctionComponent<{callback: Function, judge: Jud
           <option value={"A"}>A</option>
           <option value={"B"}>B</option>
           </select></div>
+
+        <div style={{margin: "0.15rem"}}>Number: <input type="number" disabled={!improvement}  value={impNumber} onChange={(e) => {setImpNumber(parseInt(e.target.value))}} style={{width: "100%"}}/>
+        </div>
         
       </div>
       <div className={styles.createform}>
@@ -153,7 +158,7 @@ export const CreateEvaluation: FunctionComponent<{callback: Function, judge: Jud
           let body = {
             tName: improvement ? "Improvement Round" : tournament,
             dName: improvement ? "N/A" : division,
-            rName: improvement ? "Improvement Round" : `${round} Flight ${flight}`, // e.g., Round 1 Flight A etc.
+            rName: improvement ? `Improvement Round #${impNumber}` : `${round} Flight ${flight}`, // e.g., Round 1 Flight A etc.
             isPrelim: round.indexOf("Round")!=-1&&!improvement,
             isImprovement: improvement,
             decision: dec,
@@ -169,7 +174,7 @@ export const CreateEvaluation: FunctionComponent<{callback: Function, judge: Jud
             tournamentName: improvement ? "Improvement Round" : tournament,
             divisionName: improvement ? "N/A" : division,
             date: "",
-            roundName: improvement ? "Improvement Round" : `${round} Flight ${flight}`, // e.g., Round 1 Flight A etc.
+            roundName: improvement ? `Improvement Round #${impNumber}` : `${round} Flight ${flight}`, // e.g., Round 1 Flight A etc.
             isPrelim: round.indexOf("Round")!=-1&&!improvement,
             isImprovement: improvement,
             decision: dec,
