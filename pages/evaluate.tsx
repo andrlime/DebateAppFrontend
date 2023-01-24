@@ -42,7 +42,9 @@ const Home: NextPage = () => {
       // replace later
       axios.get(`https://${backendUrl.current}/get/alljudges/${apiKey.current}`).then((res) => {
         if(res.data != null) {
-          setJudges(res.data.result);
+          let j: Judge[] = res.data.result;
+          j.sort((a,b) => computeZ(b,j) - computeZ(a,j) || computeMean(b) - computeMean(a) || computeStdev(a) - computeStdev(b));
+          setJudges(j);
         }
       }).catch(err => {
         setError(err);
