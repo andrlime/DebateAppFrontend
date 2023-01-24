@@ -29,8 +29,6 @@ const Home: NextPage = () => {
   const router = useRouter();
 
   useEffect(() => {
-    console.log(query, localStorage);
-
     if(query.auth == 'true') {
       setAuth(true);
     } else {

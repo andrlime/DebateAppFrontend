@@ -2,6 +2,7 @@ import axios from "axios";
 import { FunctionComponent, useState, useRef, useEffect } from "react";
 import { Judge } from "../../types/Judge";
 import { JudgeUploadArea } from "./JudgeUploadArea";
+import { JudgeExportArea } from "./JudgeExportArea";
 import styles from '../../styles/Q.module.css';
 
 export const CreateJudge: FunctionComponent<{callback: Function, addALot: Function}> = ({callback, addALot}) => {
@@ -51,6 +52,7 @@ export const CreateJudge: FunctionComponent<{callback: Function, addALot: Functi
         }}>Create Judge</button>
   
         <JudgeUploadArea addJudge={addJudges}/>
+        <JudgeExportArea />
       </div>
   
     </div>);
