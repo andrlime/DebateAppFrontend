@@ -1,5 +1,6 @@
 import { ObjectId } from "mongodb";
 import { Evaluation } from "./Evaluation";
+import {Complex, gcd, stdDev} from '@mathigon/fermat';
 
 export type Judge = {
   _id: ObjectId | string;
@@ -29,77 +30,27 @@ export const computeStdev = (judge: Judge): number => {
 };
 
 export const computeZ = (judge: Judge, judges: Judge[]): number => {
-  // total weighted score of all judges and stdev
-  let wsum = 0;
-  let wtotal = 0;
-  let numberOfEvaluations = 0;
-  for (let j of judges) {
-    for (let ev of j.evaluations) {
-      wsum +=
-        (ev.bias + ev.citation + ev.comparison + ev.coverage + ev.decision) *
-        ev.weight;
-      wtotal += ev.weight;
-      numberOfEvaluations++;
-    }
-  }
+  const W_AVG_ALLJUDGES = (judges.reduce((accum, current) => accum + computeMean(current),0)/judges.length);
+  const W_AVG_JUST_THIS_JUDGE = computeMean(judge);
 
-  const W_AVG_ALLJUDGES = wsum / wtotal;
+  let ARR_EVALS: number[] = [];
+  judge.evaluations.forEach((e) => {
+    ARR_EVALS.push(e.bias+e.citation+e.comparison+e.coverage+e.decision);
+  });
 
-  //// stdev, all judges
-  let variance = judges.reduce(
-    (accum, current) =>
-      accum +
-      current.evaluations.reduce(
-        (a, c) =>
-          a +
-          (c.bias +
-            c.citation +
-            c.comparison +
-            c.coverage +
-            c.decision -
-            W_AVG_ALLJUDGES) **
-            2,
-        0
-      ),
-    0
-  );
-  const SD_ALLJUDGES = (variance / numberOfEvaluations) ** 0.5;
+  let ARR_ALL_EVALS: number[] = [];
+  judges.forEach((f) => {
+    f.evaluations.forEach((e) => {
+      ARR_ALL_EVALS.push(e.bias+e.citation+e.comparison+e.coverage+e.decision);
+    });
+  });
 
-  // total weighted score of just this judge and stdev
-  wsum = 0;
-  wtotal = 0;
-  numberOfEvaluations = 0;
-  for (let ev of judge.evaluations) {
-    wsum +=
-      (ev.bias + ev.citation + ev.comparison + ev.coverage + ev.decision) *
-      ev.weight;
-    wtotal += ev.weight;
-    numberOfEvaluations++;
-  }
-  const W_AVG_JUST_THIS_JUDGE = wsum / wtotal;
+  // find stdev for both samples
+  const SD_JUST_THIS_JUDGE = stdDev(ARR_EVALS);
+  const SD_ALL_JUDGES = stdDev(ARR_ALL_EVALS);
 
-  variance = judge.evaluations.reduce(
-    (a, c) =>
-      a +
-      (c.bias +
-        c.citation +
-        c.comparison +
-        c.coverage +
-        c.decision -
-        W_AVG_ALLJUDGES) **
-        2,
-    0
-  );
-  const SD_JUST_THIS_JUDGE = (variance / numberOfEvaluations) ** 0.5;
-
-  // if you can read all of that without blinking, you deserve a raise
-  // find the z score
-  let z =
-    (W_AVG_ALLJUDGES - W_AVG_JUST_THIS_JUDGE) /
-    (SD_ALLJUDGES ** 2 / judges.length +
-      SD_JUST_THIS_JUDGE ** 2 / judge.evaluations.length) **
-      0.5;
-  return -1 * z;
+  return (W_AVG_JUST_THIS_JUDGE - W_AVG_ALLJUDGES) /
+    ((((SD_JUST_THIS_JUDGE**2)/ARR_EVALS.length) + ((SD_ALL_JUDGES**2)/ARR_ALL_EVALS.length))**0.5 + 1);
 };
 
 export const computeMean = (j: Judge, f?: string[]): number => {
