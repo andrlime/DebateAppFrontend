@@ -19,7 +19,7 @@ export const JudgeUploadArea: FunctionComponent<{addJudge: Function}> = ({addJud
         let rx = /((\w|[-]|[.])+[@]\w+([.]\w+)+)/g; //tests if it's an email
         if(!email.match(rx)) continue; // not a valid email
   
-        allJudgesArray.push({_id: "REFRESH TO SEE", name: name, email: email, evaluations: []});
+        allJudgesArray.push({_id: "REFRESH TO SEE", name: name, email: email, evaluations: [], paradigm: ""});
       }
       addJudge(allJudgesArray);
     }

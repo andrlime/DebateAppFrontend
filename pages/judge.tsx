@@ -25,7 +25,7 @@ const Home: NextPage = () => {
   const [auth, setAuth] = useState(false);
 
   const pushNewEvaluation = (evaluation: Evaluation) => {
-    let j = {_id: judge!._id, name: judge?.name || "", email: judge?.email || "", evaluations: judge?.evaluations || []};
+    let j = {_id: judge!._id, name: judge?.name || "", email: judge?.email || "", evaluations: judge?.evaluations || [], paradigm: judge?.paradigm || ""};
     j.evaluations = [evaluation, ...j.evaluations]
     setFilter(findFourMostRecents(j));
     setJudge(j);
@@ -56,7 +56,7 @@ const Home: NextPage = () => {
       }
 
     });
-  },[query.judgeId, query.user, query.pass]);
+  },[query.judgeId, query.user, query.pass, query.auth, router]);
 
   const findFourMostRecents = (j: Judge) => {
     // this assues the judge is sorted as it should be in the axios response
@@ -122,7 +122,7 @@ const Home: NextPage = () => {
         j.push(judge.evaluations[i]);
       }
     }
-    let newJudge = {_id: judge._id, name: judge.name, email: judge.email, evaluations: j};
+    let newJudge = {_id: judge._id, name: judge.name, email: judge.email, evaluations: j, paradigm: judge.paradigm };
     setFilter(findFourMostRecents(newJudge));
     setJudge(newJudge);
     // call API route to delete the judge from the database
@@ -210,7 +210,7 @@ const Home: NextPage = () => {
                 j!.evaluations = evals;
                 setJudge(j);
                 setFilter(findFourMostRecents(j!));
-              }} callback={pushNewEvaluation} judge={judge || {_id: "", name: "", email: "", evaluations: []}}/> : <span className={styles.sublabel}>Login to create</span>}
+              }} callback={pushNewEvaluation} judge={judge || {_id: "", name: "", email: "", evaluations: [], paradigm: ""}}/> : <span className={styles.sublabel}>Login to create</span>}
             
             </div> : "Loading..."}
 

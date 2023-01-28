@@ -1,12 +1,13 @@
 import { ObjectId } from "mongodb";
 import { Evaluation } from "./Evaluation";
-import {Complex, gcd, stdDev} from '@mathigon/fermat';
+import {stdDev} from '@mathigon/fermat';
 
 export type Judge = {
   _id: ObjectId | string;
   name: string;
   email: string;
   evaluations: Evaluation[];
+  paradigm: string;
 };
 
 // methods
@@ -271,3 +272,5 @@ export const computeMeanBias = (j: Judge, f?: string[]): number => {
     return isNaN(result) ? 0 : result;
   }
 };
+
+export default Judge;

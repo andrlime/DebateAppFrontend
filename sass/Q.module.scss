@@ -299,3 +299,104 @@ $verylight: #ffffff;
     height: fit-content;
   }
 }
+
+.paradigmcard {
+  border: 0.5rem solid $light;
+  padding: 1rem;
+  border-radius: 1rem;
+  margin: 1rem;
+  margin-left: 0;
+  width: 75%;
+  min-width: 450px;
+  max-height: 250px;
+  overflow: scroll;
+  transition: 500ms ease-in-out;
+
+  button:hover {
+    cursor: pointer;
+  }
+}
+
+.paradigmcard:hover {
+  border: 0.5rem solid $dark;
+  height: fit-content;
+  max-height: 100vh;
+  overflow: visible;
+  animation-name: anim;
+  animation-duration: 1000ms;
+}
+
+@keyframes anim {
+  50% {
+    border: 0.5rem solid $dark;
+    height: fit-content;
+  }
+
+  100% {
+    overflow: visible;
+  }
+}
+
+.activecard {
+  border: 0.5rem solid $dark;
+  height: fit-content;
+  max-height: 100vh;
+  overflow: visible;
+  padding: 1rem;
+  border-radius: 1rem;
+  margin: 1rem;
+  margin-left: 0;
+  width: 75%;
+  min-width: 450px;
+}
+
+.markdownBox {
+  * {
+    margin: 0.15rem;
+    margin-left: 0;
+  }
+
+  h1 {
+    font-weight: 750;
+    font-size: 1.6rem;
+    color: $dark;
+  }
+
+  h2 {
+    font-weight: 750;
+    font-size: 1.3rem;
+    color: $dark;
+    text-decoration: underline;
+  }
+
+  h3 {
+    font-weight: 750;
+    font-size: 1.3rem;
+    color: $dark;
+  }
+
+  h4 {
+    font-weight: 750;
+    font-size: 1.2rem;
+    color: $dark;
+    text-decoration: underline;
+  }
+
+  h5 {
+    font-weight: 750;
+    font-size: 1.2rem;
+    color: $dark;
+  }
+
+  h6 {
+    font-weight: 750;
+    font-size: 1.2rem;
+    color: $dark;
+  }
+
+  p, li, span {
+    font-weight: 300;
+    font-size: 1.0rem;
+    color: $dark;
+  }
+}

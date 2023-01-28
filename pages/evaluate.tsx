@@ -13,6 +13,8 @@ import { CreateJudge } from '../components/create/CreateJudge';
 import { useRouter } from 'next/router';
 
 const Home: NextPage = () => {
+  const { query } = useRouter();
+
   const [judges, setJudges] = useState<Array<Judge>>([]);
   const [error, setError] = useState("Loading...");
   const [hasError, setHasError] = useState(false);
@@ -33,7 +35,7 @@ const Home: NextPage = () => {
       setAuth(true);
     } else {
       setAuth(false);
-      router.push(`/auth`);
+      router.push(`/auth?path=evaluate`, '/auth');
     }
 
     axios.get("/api/getkey").then((res)=> {
@@ -51,7 +53,7 @@ const Home: NextPage = () => {
         setHasError(true);
       }); 
     })
-  },[]);
+  },[query.auth, router]);
 
   const sortTable = (sortColumnIndex: number, sortFunction: Function, array?: any[]) => {
     if(!array) {
@@ -87,12 +89,13 @@ const Home: NextPage = () => {
           name: ju.name,
           email: ju.email
         };
-        let result = await axios.post(`https://${backendUrl.current}/create/judge`, body)
+        let result = await axios.post(`https://${backendUrl.current}/create/judge`, body);
 
         thingsToAdd.push({_id: result.data.result.insertedId,
                           name: ju.name,
                           email: ju.email,
-                          evaluations: []})
+                          evaluations: [],
+                          paradigm: ""})
       }
 
       let j = judges.filter((_) => true);
@@ -107,7 +110,6 @@ const Home: NextPage = () => {
 
   const ascSymb = isAscending ? <>&uarr;</> : <>&darr;</>;
   let multiplierAsc = (isAscending ? 1 : -1);
-  const { query } = useRouter();
 
   return (
     <div className={styles.everything}>

@@ -15,6 +15,7 @@ const Home: NextPage = () => {
 
   const backendUrl = useRef("");
   const router = useRouter();
+  const { query } = useRouter();
 
   useEffect(() => {
     axios.get("/api/getkey").then((res)=> {
@@ -32,14 +33,14 @@ const Home: NextPage = () => {
             localStorage.setItem('user', username);
             localStorage.setItem('pass', password);
 
-            router.push(`/evaluate?auth=true&code=${resp.data.result}`, '/evaluate');
+            router.push(`/${query.path ? `${query.path}?auth=true&code=${resp.data.result}` : "/"}`, `/${query.path || "/"}`);
           } else {
             setFail(true);
           }
         })
       }
     })
-  },[])
+  },[password, router, username, query.path])
 
   const login = () => {
     if(username == "" || password == "") return;
@@ -52,7 +53,7 @@ const Home: NextPage = () => {
         localStorage.setItem('user', username);
         localStorage.setItem('pass', password);
 
-        router.push(`/evaluate?auth=true&code=${resp.data.result}`, '/evaluate');
+        router.push(`/${query.path ? `${query.path}?auth=true&code=${resp.data.result}` : "/"}`, `/${query.path || "/"}`);
       } else {
         setFail(true);
       }
