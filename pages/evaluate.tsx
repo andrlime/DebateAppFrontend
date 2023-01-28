@@ -186,7 +186,7 @@ const Home: NextPage = () => {
                 <td style={{backgroundColor: "#0e397a", color: "white", fontWeight: 600}} colSpan={4}></td>
               </tr></> : <tr><td colSpan={12}>Please log in</td></tr>}
             </tbody>
-          </table>) : error}
+          </table>) : error.toString()}
 
           {auth ? <CreateJudge callback={addOneJudgeCallback} addALot={addALotCallback}/> : ""}
 

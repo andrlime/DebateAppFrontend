@@ -41,9 +41,11 @@ export const computeZ = (judge: Judge, judges: Judge[]): number => {
 
   let ARR_ALL_EVALS: number[] = [];
   judges.forEach((f) => {
-    f.evaluations.forEach((e) => {
-      ARR_ALL_EVALS.push(e.bias+e.citation+e.comparison+e.coverage+e.decision);
-    });
+    if(f.evaluations[0]) {
+      f.evaluations.forEach((e) => {
+        ARR_ALL_EVALS.push(e.bias+e.citation+e.comparison+e.coverage+e.decision);
+      });
+    }
   });
 
   // find stdev for both samples
