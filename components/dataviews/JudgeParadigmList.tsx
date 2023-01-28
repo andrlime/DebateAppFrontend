@@ -13,7 +13,7 @@ type Props = {
 export const JudgeParadigmList: FC<Props> = ({data, auth, filter, showEditBox}) => {
     return (
         <div style={{display: "flex", flexDirection: "column"}}>{
-            (data.filter(element => (element.email.toLowerCase().includes(filter) || element.name.toLowerCase().includes(filter)) && (auth || element.paradigm.length > 0))).map(e => (
+            (data.filter(element => (element.email.toLowerCase().includes(filter) || element.name.toLowerCase().includes(filter)) && (auth || element.paradigm))).map(e => (
                 <SingleParadigm j={e} key={e._id.toString()} a={auth} showEditBox={showEditBox}/>
             ))
         }</div>
