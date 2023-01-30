@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
 import { Evaluation } from "./Evaluation";
-import {stdDev} from '@mathigon/fermat';
+import { stdDev } from '@mathigon/fermat';
 
 export type Judge = {
   _id: ObjectId | string;
@@ -41,7 +41,7 @@ export const computeZ = (judge: Judge, judges: Judge[]): number => {
 
   let ARR_ALL_EVALS: number[] = [];
   judges.forEach((f) => {
-    if(f.evaluations[0]) {
+    if(f.evaluations[0] && f.evaluations.length > 0) {
       f.evaluations.forEach((e) => {
         ARR_ALL_EVALS.push(e.bias+e.citation+e.comparison+e.coverage+e.decision);
       });

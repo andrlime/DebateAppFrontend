@@ -166,22 +166,22 @@ const Home: NextPage = () => {
             ))}<tr>
                 <td style={{backgroundColor: "#0e397a", color: "white", fontWeight: 600}} colSpan={2}>Overall Average</td>
                 <td style={{backgroundColor: "#0e397a", color: "white", fontWeight: 600}}>
-                {Math.round(1000*(judges.reduce((accum, current) => accum + computeMeanDecision(current),0)/judges.length))/1000}
+                {Math.round(1000*(judges.reduce((accum, current) => accum + computeMeanDecision(current),0)/(judges.filter((e) => e.evaluations.length > 0).length)))/1000}
                 </td>
                 <td style={{backgroundColor: "#0e397a", color: "white", fontWeight: 600}}>
-                {Math.round(1000*(judges.reduce((accum, current) => accum + computeMeanComparison(current),0)/judges.length))/1000}
+                {Math.round(1000*(judges.reduce((accum, current) => accum + computeMeanComparison(current),0)/(judges.filter((e) => e.evaluations.length > 0).length)))/1000}
                 </td>
                 <td style={{backgroundColor: "#0e397a", color: "white", fontWeight: 600}}>
-                {Math.round(1000*(judges.reduce((accum, current) => accum + computeMeanCitation(current),0)/judges.length))/1000}
+                {Math.round(1000*(judges.reduce((accum, current) => accum + computeMeanCitation(current),0)/(judges.filter((e) => e.evaluations.length > 0).length)))/1000}
                 </td>
                 <td style={{backgroundColor: "#0e397a", color: "white", fontWeight: 600}}>
-                {Math.round(1000*(judges.reduce((accum, current) => accum + computeMeanCoverage(current),0)/judges.length))/1000}
+                {Math.round(1000*(judges.reduce((accum, current) => accum + computeMeanCoverage(current),0)/(judges.filter((e) => e.evaluations.length > 0).length)))/1000}
                 </td>
                 <td style={{backgroundColor: "#0e397a", color: "white", fontWeight: 600}}>
-                {Math.round(1000*(judges.reduce((accum, current) => accum + computeMeanBias(current),0)/judges.length))/1000}
+                {Math.round(1000*(judges.reduce((accum, current) => accum + computeMeanBias(current),0)/(judges.filter((e) => e.evaluations.length > 0).length)))/1000}
                 </td>
                 <td style={{backgroundColor: "#0e397a", color: "white", fontWeight: 600}}>
-                {Math.round(1000*(judges.reduce((accum, current) => accum + computeMean(current),0)/judges.length))/1000}
+                {Math.round(1000*(judges.reduce((accum, current) => accum + computeMean(current),0)/(judges.filter((e) => e.evaluations.length > 0).length)))/1000}
                 </td>
                 <td style={{backgroundColor: "#0e397a", color: "white", fontWeight: 600}} colSpan={4}></td>
               </tr></> : <tr><td colSpan={12}>Please log in</td></tr>}
