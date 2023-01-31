@@ -9,6 +9,8 @@ export const EvalUploadArea: FunctionComponent<{addEval: Function, judge: Judge}
       // format is t, r, [scores], weight?=0, isimp, isprel
       let lines = (csvInput.match(/.+/g) || ["FAILED"])
       if(lines[0]=="FAILED") return;
+
+      if(lines[0].indexOf("roundName,divisionNae,isImprovement")==-1) return;
      
       let allEvals: Array<Evaluation> = [];
       let evaluations = lines.slice(1);

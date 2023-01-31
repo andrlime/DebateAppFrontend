@@ -254,13 +254,6 @@ const Home: NextPage = () => {
     }
   }
 
-  const exportAsCsv = (divisionName: string) => {
-    let data = divisions ? convertToCsv(divisionName) : "";
-    data = 'data:text/csv;charset=utf-8,' + encodeURI(data);
-    let fileName = `${divisionName}_Results.csv`;
-    saveAs(data, fileName)
-  }
-
   const exportSalesSheet = (speakers: string, teams: string, winningTeams: string, namelist: string[]) => {
     let data = salesSheet(speakers, teams, winningTeams, namelist);
     data = 'data:text/csv;charset=utf-8,' + encodeURI(data);
@@ -284,6 +277,13 @@ const Home: NextPage = () => {
 
       return outputString;
     }
+  }
+
+  const exportAsCsv = (divisionName: string) => {
+    let data = divisions ? convertToCsv(divisionName) : "";
+    data = 'data:text/csv;charset=utf-8,' + encodeURI(data);
+    let fileName = `${divisionName}_Results.csv`;
+    saveAs(data, fileName)
   }
 
   const saveAs = (blob: any, fileName: string) =>{

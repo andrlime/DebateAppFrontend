@@ -8,6 +8,8 @@ export const JudgeUploadArea: FunctionComponent<{addJudge: Function}> = ({addJud
       // format is name, email\n $name, $email
       let lines = (csvInput.match(/.+/g) || ["FAILED"])
       if(lines[0]=="FAILED") return;
+
+      if(lines[0].indexOf("name,email")==-1) return; // STOP
      
       let allJudgesArray: Array<Judge> = [];
       let judges = lines.slice(1);

@@ -16,7 +16,6 @@ export const FileUpload: FunctionComponent<{callback: Function, typesToAllow: st
         if(!file) return;
         else {
             readFile(file).then((e) => {
-                console.log(e);
                 callback(e);
             }
         );

@@ -1,6 +1,7 @@
 import { ObjectId } from "mongodb";
 import { Evaluation } from "./Evaluation";
 import { stdDev } from '@mathigon/fermat';
+import Options from "./Options";
 
 export type Judge = {
   _id: ObjectId | string;
@@ -8,6 +9,7 @@ export type Judge = {
   email: string;
   evaluations: Evaluation[];
   paradigm: string;
+  options?: Options
 };
 
 // methods
