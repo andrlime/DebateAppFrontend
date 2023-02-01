@@ -23,13 +23,13 @@ export const NavigationBar: FunctionComponent<{pageIndex: number, auth: boolean}
 
     return (
         <div className={styles.navbar}>
-        <div><Link href={"/"}><img width={80} src={"/icon.png"}/></Link></div>
+        <div><Link href={`/?auth=${auth ? "true" : "false"}`} as={'/'}><img width={80} src={"/icon.png"}/></Link></div>
         <br/>
         <div className={burger ? styles.burger : styles.cross} onClick={_ => setBurger(!burger)}><span></span><span></span><span></span></div>
         <div style={{padding: "1rem", color: "#0E397A"}}/>
         {!burger ? (<div>
         {(toolbox.filter(a => auth ? true : !a.auth)).map((item, index) => (
-            <Link key={item.link} href={item.link}><div className={styles.menuLabel} style={{backgroundColor: index==pageIndex ? "#ECC132" : "", color: index==pageIndex ? "black" : ""}}>{item.name}</div></Link>
+            <Link key={item.link} href={`${item.link}?auth=${auth}`} as={item.link}><div className={styles.menuLabel} style={{backgroundColor: index==pageIndex ? "#ECC132" : "", color: index==pageIndex ? "black" : ""}}>{item.name}</div></Link>
         ))}
         </div>) : ""}
         <div style={{position: "absolute", bottom: "2rem"}}>{!burger ? <img width="95%" alt={"Logo"} src={"/logo-white.png"}/> : ""}</div>

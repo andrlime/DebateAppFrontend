@@ -13,6 +13,7 @@ const Home: NextPage = () => {
   const router = useRouter();
 
   useEffect(() => {
+    console.log(query);
     if(query.auth == 'true') {
       setAuthState(true);
     }
