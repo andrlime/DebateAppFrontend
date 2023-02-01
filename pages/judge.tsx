@@ -138,7 +138,7 @@ const Home: NextPage = () => {
         <title>NHSDLC Judge Evaluation System</title>
         <link rel="icon" type="image/x-icon" href="/icon.png"/>
       </Head>
-      <NavigationBar pageIndex={4}/>
+      <NavigationBar pageIndex={4} auth={true}/>
       <div className={styles.content}>
         <div className={styles.heading}><Link href="/evaluate?auth=true" as='/evaluate'><span>&#9001;</span>&nbsp;&nbsp;&nbsp;</Link>Judge Evaluation System: Judge <span style={{textDecoration: "underline"}}>{loaded ? judge?.name : "Loading..."}</span></div>
         <div className={styles.form} style={{paddingLeft: "0rem", width: "100%"}}>

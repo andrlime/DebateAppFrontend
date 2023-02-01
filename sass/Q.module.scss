@@ -20,6 +20,7 @@ $verylight: #ffffff;
     min-width: 70px;
     max-width: 300px;
     padding: 1rem;
+    padding-right: 2rem;
     height: 100vh;
     position: sticky;
     top: 0;
@@ -310,7 +311,7 @@ $verylight: #ffffff;
   min-width: 450px;
   max-height: 250px;
   overflow: scroll;
-  transition: 500ms ease-in-out;
+  transition: 1500ms ease-in-out;
 
   button:hover {
     cursor: pointer;
@@ -320,7 +321,7 @@ $verylight: #ffffff;
 .paradigmcard:hover {
   border: 0.5rem solid $dark;
   height: fit-content;
-  max-height: 100vh;
+  max-height: 1000vh;
   overflow: visible;
   animation-name: anim;
   animation-duration: 1000ms;
@@ -354,6 +355,7 @@ $verylight: #ffffff;
   * {
     margin: 0.15rem;
     margin-left: 0;
+    margin-bottom: 0.5rem;
   }
 
   h1 {
@@ -395,7 +397,7 @@ $verylight: #ffffff;
   }
 
   p, li, span {
-    font-weight: 300;
+    font-weight: normal;
     font-size: 1.0rem;
     color: $dark;
   }

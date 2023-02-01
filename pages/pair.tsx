@@ -159,7 +159,7 @@ const Home: NextPage = () => {
         <title>NHSDLC Tabroom Tools - Pairings Tool</title>
         <link rel="icon" type="image/x-icon" href="/icon.png"/>
       </Head>
-      <NavigationBar pageIndex={0}/>
+      <NavigationBar pageIndex={0} auth={true}/>
       <div className={styles.content}>
         <div className={styles.heading}>Generate Pairings</div>
         

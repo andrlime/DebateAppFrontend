@@ -311,7 +311,7 @@ const Home: NextPage = () => {
         <title>NHSDLC Tabroom Tools - Results CSV Tool</title>
         <link rel="icon" type="image/x-icon" href="/icon.png"/>
       </Head>
-      <NavigationBar pageIndex={2}/>
+      <NavigationBar pageIndex={2} auth={true}/>
       <div className={styles.content}>
         <div className={styles.heading}>Generate Results Spreadsheets</div>
         

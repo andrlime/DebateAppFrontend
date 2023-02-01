@@ -41,7 +41,7 @@ export const ParadigmEditor: FC<Props> = ({id, callback}) => {
         <div>
             <div className={styles.markdownBox} style={{maxWidth: "1200px"}}>
                 <h1>Editing Paradigm for Judge {name || "[loading...]"}</h1>
-                <p>Instructions: This editor uses markdown. If you know how to write Markdown, great. If you don&#39;t, use this website <a href="https://pandao.github.io/editor.md/en.html" style={{textDecoration: "underline"}}>https://pandao.github.io/editor.md/en.html</a> and copy/paste the LEFT column into this box.</p>
+                <p>Instructions: This editor uses markdown. If you know how to write Markdown, great. If you don&#39;t, use this website <a href="https://word2md.com/" style={{textDecoration: "underline"}}>https://word2md.com/</a> and copy/paste the LEFT column into this box.</p>
             </div>
             <br/>
             <textarea style={{border: "0.08rem solid #0e397a", borderRadius: "2rem", padding: "1rem", width: "100%", height: "fit-content", minHeight: "200px"}} value={val} onChange={(e) => {
@@ -53,10 +53,22 @@ export const ParadigmEditor: FC<Props> = ({id, callback}) => {
                 <h1>Set Misc Details</h1>
             </div>
             <div style={{display: "grid", gridTemplateColumns: "200px 200px", gridRow: "auto auto", gridColumnGap: "20px", gridRowGap: "20px"}}>
+                
                 <div style={{display: "flex", flexDirection: "column"}}>University: <input value={u} onChange={(e) => setU(e.target.value)} type="text" style={{backgroundColor: "white", padding: "0.5rem", borderRadius: "2rem", border: `1px solid #0e397a`}}></input></div>
+                
                 <div style={{display: "flex", flexDirection: "column"}}>Age: <input value={a} onChange={(e) => setA(parseInt(e.target.value))} type="number" style={{backgroundColor: "white", padding: "0.5rem", borderRadius: "2rem", border: `1px solid #0e397a`}}></input></div>
+                
                 <div style={{display: "flex", flexDirection: "column"}}>Nationality: <input value={n} onChange={(e) => setN(e.target.value)} style={{backgroundColor: "white", padding: "0.5rem", borderRadius: "2rem", border: `1px solid #0e397a`}}></input></div>
-                <div style={{display: "flex", flexDirection: "column"}}>Gender: <input value={g} onChange={(e) => setG(e.target.value)} style={{backgroundColor: "white", padding: "0.5rem", borderRadius: "2rem", border: `1px solid #0e397a`}}></input></div>
+                
+                <div style={{display: "flex", flexDirection: "column"}}>Gender: <select value={g} onChange={(e) => setG(e.target.value)} style={{backgroundColor: "white", padding: "0.5rem", borderRadius: "2rem", border: `1px solid #0e397a`}}>
+                    
+                    <option value={"Male"}>Male</option>
+                    <option value={"Female"}>Female</option>
+                    <option value={"Non-Binary"}>Non-Binary</option>
+                    <option value={"Other"}>Other</option>
+                    
+                    </select></div>
+            
             </div>
             <br/>
 

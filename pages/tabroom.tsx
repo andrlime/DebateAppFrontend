@@ -119,7 +119,7 @@ const Home: NextPage = () => {
         <title>NHSDLC Tabroom Tools - Tabroom Convert Tool</title>
         <link rel="icon" type="image/x-icon" href="/icon.png"/>
       </Head>
-      <NavigationBar pageIndex={3}/>
+      <NavigationBar pageIndex={3} auth={true}/>
       <div className={styles.content}>
         <div className={styles.heading}>Convert NHSDLC Namelist to Tabroom Import CSV</div>
         

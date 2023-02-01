@@ -164,7 +164,7 @@ const Home: NextPage = () => {
         <title>NHSDLC Tabroom Tools - Rankings Image Tool</title>
         <link rel="icon" type="image/x-icon" href="/icon.png"/>
       </Head>
-      <NavigationBar pageIndex={1}/>
+      <NavigationBar pageIndex={1} auth={true}/>
       <div className={styles.content}>
         <div className={styles.heading}>Generate Rankings</div>
         

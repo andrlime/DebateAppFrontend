@@ -29,10 +29,12 @@ export const UploadDownload: FC<{judges: Judge[], backendUrl: string, apiKey: st
             let jid = data[0];
             let email = data[1];
             let nationality = data[3];
-            let gender = data[4];
+            let gender = data[4] == '1' ? "Male" : data[4] == '2' ? "Female" : data[2];
             let age = data[5]; // if you don't type a number, it's your fault the code crashes
             let university = data[6];
 
+            if(nationality == "" && gender == "" && age == "" && university == "") continue;
+            
             resultsArray.push({_id: jid, email: email, options: {nationality: nationality, gender: gender, age: age, university: university}});
         }
 

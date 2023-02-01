@@ -117,7 +117,7 @@ const Home: NextPage = () => {
         <title>NHSDLC Judge Evaluation System</title>
         <link rel="icon" type="image/x-icon" href="/icon.png"/>
       </Head>
-      <NavigationBar pageIndex={4}/>
+      <NavigationBar pageIndex={4} auth={true}/>
       <div className={styles.content}>
         <div className={styles.heading}>Judge Evaluation System: Viewing All Judges</div>
         <div className={styles.form} style={{paddingLeft: "0rem", width: "100%"}}>

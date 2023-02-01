@@ -77,7 +77,7 @@ const Home: NextPage = () => {
         <title>NHSDLC Judge Paradigms</title>
         <link rel="icon" type="image/x-icon" href="/icon.png"/>
       </Head>
-      <NavigationBar pageIndex={5}/>
+      <NavigationBar pageIndex={5} auth={auth}/>
       <div className={styles.content}>
         <div className={styles.heading}>NHSDLC Judge Paradigms</div>
         <div className={styles.form} style={{paddingLeft: "0rem", width: "100%"}}>

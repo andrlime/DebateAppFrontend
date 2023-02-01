@@ -12,9 +12,10 @@ type Props = {
 }
 
 export const JudgeParadigmList: FC<Props> = ({data, auth, filter, showEditBox}) => {
+    const DATA = (data.filter(element => (element.email.toLowerCase().includes(filter) || element.name.toLowerCase().includes(filter)) && (auth || element.paradigm)));
     return (
         <div style={{display: "flex", flexDirection: "column"}}>{
-            (data.filter(element => (element.email.toLowerCase().includes(filter) || element.name.toLowerCase().includes(filter)) && (auth || element.paradigm))).map(e => (
+            DATA.sort((a,b) => a.name.localeCompare(b.name)).map(e => (
                 <SingleParadigm j={e} key={e._id.toString()} a={auth} showEditBox={showEditBox}/>
             ))
         }</div>
@@ -32,19 +33,19 @@ const SingleParadigm: FC<{j: Judge, key: any, a: boolean, showEditBox: Function}
             }} style={{padding: "0.5rem 1rem 0.5rem 1rem", background: "#0e397a", border: "none", borderRadius: "3rem", color: "white", fontWeight: 900}}>Edit</button> : ""}</div>
             <div className={styles.markdownBox} style={{flexDirection: "row", display: "flex", justifyContent: "space-between"}}>
                 
-                <div>
+                <div style={{display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
                     <h2>Nationality</h2>
                     <p>{OPTIONS.nationality || "not specified"}</p>
                 </div>
-                <div>
+                <div style={{display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
                     <h2>Gender</h2>
                     <p>{OPTIONS.gender == "O" ? "Non Binary" : OPTIONS.gender || "not specified"}</p>
                 </div>
-                <div>
+                <div style={{display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
                     <h2>Age</h2>
                     <p>{OPTIONS.age || "not specified"}</p>
                 </div>
-                <div>
+                <div style={{display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
                     <h2>University</h2>
                     <p>{OPTIONS.university || "not specified"}</p>
                 </div>
