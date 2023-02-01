@@ -73,7 +73,7 @@ export const ParadigmEditor: FC<Props> = ({id, callback}) => {
             <br/>
 
             <button style={{cursor: "pointer", padding: "0.5rem 1rem 0.5rem 1rem", background: "#0e397a", border: "none", borderRadius: "3rem", color: "white", fontWeight: 900}} onClick={() => {
-                axios.post(`https://${backendUrl.current}/update/paradigm/${apiKey.current}/${id}`, {paradigm: val, options: {nationality: n, gender: g, age: a, university: u}}).then((_) => {
+                axios.post(`https://${backendUrl.current}/update/paradigm/${apiKey.current}/${id}`, {paradigm: val, options: {nationality: n, gender: g, age: a, university: u}, updated: true}).then((_) => {
                     callback(id, val, {nationality: n, gender: g, age: a, university: u});
                 });
             }}>Done</button>

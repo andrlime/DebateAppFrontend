@@ -8,6 +8,7 @@ import {
   Title,
   Tooltip,
   Legend,
+  ChartOptions
 } from 'chart.js';
 import { FunctionComponent } from 'react';
 
@@ -22,7 +23,18 @@ ChartJS.register(
 );
 
 export const LineGraph: FunctionComponent<{data: any}> = ({data}) => {
-    return (
-        <Line data={data} />
-    )
+  const options: any = {
+    scales: {
+      y:
+        {
+          min: 0,
+          max: 6,
+          stepSize: 1,
+        }
+    },
+  };
+
+  return (
+      <Line data={data} options={options}/>
+  )
 }
