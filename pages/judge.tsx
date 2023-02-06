@@ -24,6 +24,9 @@ const Home: NextPage = () => {
 
   const [auth, setAuth] = useState(false);
 
+  const [sort, setSort] = useState(false);
+  const [order, setOrder] = useState(true);
+
   const pushNewEvaluation = (evaluation: Evaluation) => {
     let j = {_id: judge!._id, name: judge?.name || "", email: judge?.email || "", evaluations: judge?.evaluations || [], paradigm: judge?.paradigm || ""};
     j.evaluations = [evaluation, ...j.evaluations]
@@ -157,7 +160,10 @@ const Home: NextPage = () => {
                 <tbody>
                 <tr style={{height: "1rem"}}>
                   <td style={{width:"4%"}}>Date</td>
-                  <td style={{width:"8%"}}>Tournament Name</td>                  
+                  <td onClick={() => {
+                    setOrder(!order);
+                    setSort(true);
+                  }} style={{width:"8%"}}>Tournament Name <span>{sort ? order ? <>&uarr;</> : <>&darr;</> : <>&#124;</>}</span></td>                  
                   <td style={{width:"8%"}}>Round Name</td>
                   <td style={{width:"8%"}}>Division</td>
 
@@ -169,7 +175,7 @@ const Home: NextPage = () => {
                   <td style={{width:"15%"}}>Total</td>
                   <td style={{backgroundColor: "#b81818"}}>Delete</td>
                 </tr>
-                {auth ? (judge?.evaluations || []).map((element,index)=>(
+                {auth ? (!sort ? judge?.evaluations || [] : (judge!.evaluations.sort((a,b) => (order ? 1 : -1) * (a.tournamentName.localeCompare(b.tournamentName))))).map((element,index)=>(
                   <tr key={element.date.toString() || ""}>
                     <td style={{background: filter.includes(element.tournamentName) ? "" : "#d9d9d9"}}>{element.date.toString() || ""}</td>
                     <td style={{background: filter.includes(element.tournamentName) ? "" : "#d9d9d9"}}>{element.tournamentName}</td>
