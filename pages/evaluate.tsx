@@ -45,7 +45,12 @@ const Home: NextPage = () => {
       axios.get(`https://${backendUrl.current}/get/alljudges/${apiKey.current}`).then((res) => {
         if(res.data != null) {
           let j: Judge[] = res.data.result;
-          j.sort((a,b) => computeZ(b,j) - computeZ(a,j) || computeMean(b) - computeMean(a) || computeStdev(a) - computeStdev(b));
+          j.sort((a,b) => {
+            if(a.evaluations.length == 0) return 1;
+            if(b.evaluations.length == 0) return -1;
+
+            return computeZ(b,j) - computeZ(a,j) || computeMean(b, findFourMostRecents(b)) - computeMean(a, findFourMostRecents(a)) || computeStdev(a) - computeStdev(b) || a.evaluations.length - b.evaluations.length
+          });
           setJudges(j);
         }
       }).catch(err => {
