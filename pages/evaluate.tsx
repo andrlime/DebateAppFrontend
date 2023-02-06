@@ -108,6 +108,25 @@ const Home: NextPage = () => {
     add();
   }
 
+  const findFourMostRecents = (j: Judge) => {
+    // this assues the judge is sorted as it should be in the axios response
+    let strings: string[] = [];
+    let count = 0;
+    const AMOUNT_I_WANT = 4;
+    for(let ev of j.evaluations) {
+      if(strings.includes(ev.tournamentName)) continue;
+      else {
+        strings.push(ev.tournamentName);
+        count++;
+      }
+      if(count == AMOUNT_I_WANT) {
+        return strings;
+      }
+    }
+
+    return strings;
+  }
+
   const ascSymb = isAscending ? <>&uarr;</> : <>&darr;</>;
   let multiplierAsc = (isAscending ? 1 : -1);
 
@@ -151,13 +170,13 @@ const Home: NextPage = () => {
                 <td>{element.name}</td>
                 <td>{element.email}</td>
 
-                <td>{Math.round( 1000 * computeMeanDecision(element) ) / 1000}</td>
-                <td>{Math.round( 1000 * computeMeanComparison(element) ) / 1000}</td>
-                <td>{Math.round( 1000 * computeMeanCitation(element) ) / 1000}</td>
-                <td>{Math.round( 1000 * computeMeanCoverage(element) ) / 1000}</td>
-                <td>{Math.round( 1000 * computeMeanBias(element) ) / 1000}</td>
+                <td>{Math.round( 1000 * computeMeanDecision(element, findFourMostRecents(element)) ) / 1000}</td>
+                <td>{Math.round( 1000 * computeMeanComparison(element, findFourMostRecents(element)) ) / 1000}</td>
+                <td>{Math.round( 1000 * computeMeanCitation(element, findFourMostRecents(element)) ) / 1000}</td>
+                <td>{Math.round( 1000 * computeMeanCoverage(element, findFourMostRecents(element)) ) / 1000}</td>
+                <td>{Math.round( 1000 * computeMeanBias(element, findFourMostRecents(element)) ) / 1000}</td>
 
-                <td>{Math.round( 1000 * computeMean(element) ) / 1000}</td>
+                <td>{Math.round( 1000 * computeMean(element, findFourMostRecents(element)) ) / 1000}</td>
                 <td>{Math.round( 1000 * computeStdev(element) ) / 1000 || "0"}</td>
                 <td>{Math.round( 1000 * computeZ(element, judges) )/1000}</td>
                 <Link href={element._id!="REFRESH TO SEE" ? `/judge?judgeId=${element._id}&auth=true` : ''} as={element._id!="REFRESH TO SEE" ? `/judge` : ''}><td id={styles.customrow} style={{width: "10%", padding: "0.3rem"}}>&rarr;</td></Link>
@@ -166,22 +185,22 @@ const Home: NextPage = () => {
             ))}<tr>
                 <td style={{backgroundColor: "#0e397a", color: "white", fontWeight: 600}} colSpan={2}>Overall Average</td>
                 <td style={{backgroundColor: "#0e397a", color: "white", fontWeight: 600}}>
-                {Math.round(1000*(judges.reduce((accum, current) => accum + computeMeanDecision(current),0)/(judges.filter((e) => e.evaluations.length > 0).length)))/1000}
+                {Math.round(1000*(judges.reduce((accum, current) => accum + computeMeanDecision(current, findFourMostRecents(current)),0)/(judges.filter((e) => e.evaluations.length > 0).length)))/1000}
                 </td>
                 <td style={{backgroundColor: "#0e397a", color: "white", fontWeight: 600}}>
-                {Math.round(1000*(judges.reduce((accum, current) => accum + computeMeanComparison(current),0)/(judges.filter((e) => e.evaluations.length > 0).length)))/1000}
+                {Math.round(1000*(judges.reduce((accum, current) => accum + computeMeanComparison(current, findFourMostRecents(current)),0)/(judges.filter((e) => e.evaluations.length > 0).length)))/1000}
                 </td>
                 <td style={{backgroundColor: "#0e397a", color: "white", fontWeight: 600}}>
-                {Math.round(1000*(judges.reduce((accum, current) => accum + computeMeanCitation(current),0)/(judges.filter((e) => e.evaluations.length > 0).length)))/1000}
+                {Math.round(1000*(judges.reduce((accum, current) => accum + computeMeanCitation(current, findFourMostRecents(current)),0)/(judges.filter((e) => e.evaluations.length > 0).length)))/1000}
                 </td>
                 <td style={{backgroundColor: "#0e397a", color: "white", fontWeight: 600}}>
-                {Math.round(1000*(judges.reduce((accum, current) => accum + computeMeanCoverage(current),0)/(judges.filter((e) => e.evaluations.length > 0).length)))/1000}
+                {Math.round(1000*(judges.reduce((accum, current) => accum + computeMeanCoverage(current, findFourMostRecents(current)),0)/(judges.filter((e) => e.evaluations.length > 0).length)))/1000}
                 </td>
                 <td style={{backgroundColor: "#0e397a", color: "white", fontWeight: 600}}>
-                {Math.round(1000*(judges.reduce((accum, current) => accum + computeMeanBias(current),0)/(judges.filter((e) => e.evaluations.length > 0).length)))/1000}
+                {Math.round(1000*(judges.reduce((accum, current) => accum + computeMeanBias(current, findFourMostRecents(current)),0)/(judges.filter((e) => e.evaluations.length > 0).length)))/1000}
                 </td>
                 <td style={{backgroundColor: "#0e397a", color: "white", fontWeight: 600}}>
-                {Math.round(1000*(judges.reduce((accum, current) => accum + computeMean(current),0)/(judges.filter((e) => e.evaluations.length > 0).length)))/1000}
+                {Math.round(1000*(judges.reduce((accum, current) => accum + computeMean(current, findFourMostRecents(current)),0)/(judges.filter((e) => e.evaluations.length > 0).length)))/1000}
                 </td>
                 <td style={{backgroundColor: "#0e397a", color: "white", fontWeight: 600}} colSpan={4}></td>
               </tr></> : <tr><td colSpan={12}>Please log in</td></tr>}

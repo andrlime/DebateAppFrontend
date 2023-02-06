@@ -41,7 +41,8 @@ const Home: NextPage = () => {
       axios.get(`http${backendUrl.current.indexOf('localhost')!=-1 ? "" : "s"}://${backendUrl.current}/get/judge/${apiKey.current}/${query.judgeId || ""}`).then((res) => {
         let j = (res.data.result);
         if(j.evaluations) {
-          j.evaluations = j.evaluations.sort((b: Evaluation, a: Evaluation) => (new Date(a.date.toString())).getFullYear() - (new Date(b.date.toString())).getFullYear() || (new Date(a.date.toString())).getMonth() - (new Date(b.date.toString())).getMonth() || (new Date(a.date.toString())).getDate() - (new Date(b.date.toString())).getDate());
+          j.evaluations = j.evaluations.sort((b: Evaluation, a: Evaluation) => (new Date(a.date)).getFullYear() - (new Date(b.date)).getFullYear() || (new Date(a.date)).getMonth() - (new Date(b.date.toString())).getMonth() || (new Date(a.date.toString())).getDate() - (new Date(b.date.toString())).getDate() || (new Date(a.date.toString())).getHours() - (new Date(b.date.toString())).getHours() || (new Date(a.date.toString())).getMinutes() - (new Date(b.date.toString())).getMinutes());
+          j.evaluations.forEach((e: Evaluation) => console.log(new Date(e.date)));
           setJudge(j);
           setFilter(findFourMostRecents(j));
           setLoaded(true);
