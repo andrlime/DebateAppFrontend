@@ -32,6 +32,25 @@ export const computeStdev = (judge: Judge): number => {
   return (sumOfVariances / (partialList.length - 1)) ** 0.5;
 };
 
+const findFourMostRecents = (j: Judge) => {
+  // this assues the judge is sorted as it should be in the axios response
+  let strings: string[] = [];
+  let count = 0;
+  const AMOUNT_I_WANT = 4;
+  for(let ev of j.evaluations) {
+    if(strings.includes(ev.tournamentName)) continue;
+    else {
+      strings.push(ev.tournamentName);
+      count++;
+    }
+    if(count == AMOUNT_I_WANT) {
+      return strings;
+    }
+  }
+
+  return strings;
+}
+
 export const computeZ = (judge: Judge, judges: Judge[]): number => {
   const W_AVG_ALLJUDGES = (judges.reduce((accum, current) => accum + computeMean(current),0)/judges.length);
   const W_AVG_JUST_THIS_JUDGE = computeMean(judge);
@@ -55,7 +74,7 @@ export const computeZ = (judge: Judge, judges: Judge[]): number => {
   const SD_ALL_JUDGES = stdDev(ARR_ALL_EVALS);
 
   return (W_AVG_JUST_THIS_JUDGE - W_AVG_ALLJUDGES) /
-    ((((SD_JUST_THIS_JUDGE**2)/ARR_EVALS.length) + ((SD_ALL_JUDGES**2)/ARR_ALL_EVALS.length))**0.5 + 1);
+    ((((SD_JUST_THIS_JUDGE**2)/findFourMostRecents(judge).length) + ((SD_ALL_JUDGES**2)/ARR_ALL_EVALS.length))**0.5 + 1);
 };
 
 export const computeMean = (j: Judge, f?: string[]): number => {
