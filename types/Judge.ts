@@ -73,8 +73,9 @@ export const computeZ = (judge: Judge, judges: Judge[]): number => {
   const SD_JUST_THIS_JUDGE = stdDev(ARR_EVALS);
   const SD_ALL_JUDGES = stdDev(ARR_ALL_EVALS);
 
-  return (W_AVG_JUST_THIS_JUDGE - W_AVG_ALLJUDGES) /
-    ((((SD_JUST_THIS_JUDGE**2)/findFourMostRecents(judge).length) + ((SD_ALL_JUDGES**2)/ARR_ALL_EVALS.length))**0.5 + 1);
+  let denominator = (SD_ALL_JUDGES**2 * ((1/(findFourMostRecents(judge).length) + ((SD_JUST_THIS_JUDGE) + 1/(judges.reduce((acc, cur) => acc + findFourMostRecents(cur).length,0)))))) ** 0.5;
+
+  return (W_AVG_JUST_THIS_JUDGE - W_AVG_ALLJUDGES) / denominator;
 };
 
 export const computeMean = (j: Judge, f?: string[]): number => {
