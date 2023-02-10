@@ -99,7 +99,8 @@ export const computeMean = (j: Judge, f?: string[]): number => {
 
     // now i have all the averages, so i want to average the averages
 
-    return averages.reduce((acc, cur) => acc + cur, 0) / averages.length;
+    const G = averages.reduce((acc, cur) => acc + cur, 0) / averages.length;
+    return isNaN(G) ? 0 : G;
   } else {
     // no filters, do all of them
     let wsum = 0;
@@ -118,6 +119,7 @@ export const computeMean = (j: Judge, f?: string[]): number => {
 };
 
 export const computeMeanDecision = (j: Judge, f?: string[]): number => {
+  console.log(j, f);
   // f is filters
   if (f) {
     // yes filters, only do the ones inside filters
@@ -137,7 +139,8 @@ export const computeMeanDecision = (j: Judge, f?: string[]): number => {
 
     // now i have all the averages, so i want to average the averages
 
-    return averages.reduce((acc, cur) => acc + cur, 0) / averages.length;
+    const G = averages.reduce((acc, cur) => acc + cur, 0) / averages.length;
+    return isNaN(G) ? 0 : G;
   } else {
     // no filters, do all of them
     let wsum = 0;
@@ -173,7 +176,8 @@ export const computeMeanCoverage = (j: Judge, f?: string[]): number => {
 
     // now i have all the averages, so i want to average the averages
 
-    return averages.reduce((acc, cur) => acc + cur, 0) / averages.length;
+    const G = averages.reduce((acc, cur) => acc + cur, 0) / averages.length;
+    return isNaN(G) ? 0 : G;
   } else {
     // no filters, do all of them
     let wsum = 0;
@@ -209,7 +213,8 @@ export const computeMeanCitation = (j: Judge, f?: string[]): number => {
 
     // now i have all the averages, so i want to average the averages
 
-    return averages.reduce((acc, cur) => acc + cur, 0) / averages.length;
+    const G = averages.reduce((acc, cur) => acc + cur, 0) / averages.length;
+    return isNaN(G) ? 0 : G;
   } else {
     // no filters, do all of them
     let wsum = 0;
@@ -245,7 +250,8 @@ export const computeMeanComparison = (j: Judge, f?: string[]): number => {
 
     // now i have all the averages, so i want to average the averages
 
-    return averages.reduce((acc, cur) => acc + cur, 0) / averages.length;
+    const G = averages.reduce((acc, cur) => acc + cur, 0) / averages.length;
+    return isNaN(G) ? 0 : G;
   } else {
     // no filters, do all of them
     let wsum = 0;
@@ -281,7 +287,8 @@ export const computeMeanBias = (j: Judge, f?: string[]): number => {
 
     // now i have all the averages, so i want to average the averages
 
-    return averages.reduce((acc, cur) => acc + cur, 0) / averages.length;
+    const G = averages.reduce((acc, cur) => acc + cur, 0) / averages.length;
+    return isNaN(G) ? 0 : G;
   } else {
     // no filters, do all of them
     let wsum = 0;
