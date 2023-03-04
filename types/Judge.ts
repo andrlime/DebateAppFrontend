@@ -52,30 +52,35 @@ const findFourMostRecents = (j: Judge) => {
 }
 
 export const computeZ = (judge: Judge, judges: Judge[]): number => {
-  const W_AVG_ALLJUDGES = (judges.reduce((accum, current) => accum + computeMean(current),0)/judges.length);
-  const W_AVG_JUST_THIS_JUDGE = computeMean(judge);
+  const W_AVG_ALLJUDGES = (judges.reduce((accum, current) => accum + computeMean(current, findFourMostRecents(current)),0)/judges.length);
+  const W_AVG_JUST_THIS_JUDGE = computeMean(judge, findFourMostRecents(judge));
 
   let ARR_EVALS: number[] = [];
   judge.evaluations.forEach((e) => {
-    ARR_EVALS.push(e.bias+e.citation+e.comparison+e.coverage+e.decision);
+    let fmr = findFourMostRecents(judge);
+    if(fmr.includes(e.tournamentName)) {
+      ARR_EVALS.push(e.bias+e.citation+e.comparison+e.coverage+e.decision);
+    }
   });
 
   let ARR_ALL_EVALS: number[] = [];
   judges.forEach((f) => {
-    if(f.evaluations[0] && f.evaluations.length > 0) {
-      f.evaluations.forEach((e) => {
+    let fmr = findFourMostRecents(f);
+    f.evaluations.forEach((e) => {
+      if(fmr.includes(e.tournamentName)) {
         ARR_ALL_EVALS.push(e.bias+e.citation+e.comparison+e.coverage+e.decision);
-      });
-    }
+      }
+    });
   });
 
   // find stdev for both samples
   const SD_JUST_THIS_JUDGE = stdDev(ARR_EVALS);
   const SD_ALL_JUDGES = stdDev(ARR_ALL_EVALS);
 
-  let denominator = (SD_ALL_JUDGES**2 * ((1/(findFourMostRecents(judge).length) + ((SD_JUST_THIS_JUDGE) + 1/(judges.reduce((acc, cur) => acc + findFourMostRecents(cur).length,0)))))) ** 0.5;
-
-  return (W_AVG_JUST_THIS_JUDGE - W_AVG_ALLJUDGES) / denominator;
+  //let denominator = (SD_ALL_JUDGES**2 * ((1/(findFourMostRecents(judge).length) + ((SD_JUST_THIS_JUDGE) + 1/(judges.reduce((acc, cur) => acc + findFourMostRecents(cur).length,0)))))) ** 0.5;
+  //console.log(W_AVG_JUST_THIS_JUDGE, computeMean(judge, findFourMostRecents(judge)));
+  let ZZ = (W_AVG_JUST_THIS_JUDGE - W_AVG_ALLJUDGES) / SD_ALL_JUDGES;
+  return ZZ
 };
 
 export const computeMean = (j: Judge, f?: string[]): number => {
@@ -119,7 +124,6 @@ export const computeMean = (j: Judge, f?: string[]): number => {
 };
 
 export const computeMeanDecision = (j: Judge, f?: string[]): number => {
-  console.log(j, f);
   // f is filters
   if (f) {
     // yes filters, only do the ones inside filters
