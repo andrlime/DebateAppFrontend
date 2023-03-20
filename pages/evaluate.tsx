@@ -49,8 +49,9 @@ const Home: NextPage = () => {
             if(a.evaluations.length == 0) return 1;
             if(b.evaluations.length == 0) return -1;
 
-            return computeMean(b, findFourMostRecents(b)) - computeMean(a, findFourMostRecents(a)) || computeZ(b,j) - computeZ(a,j) || computeStdev(a) - computeStdev(b) || a.evaluations.length - b.evaluations.length
+            return computeZ(b,j) - computeZ(a,j) || computeMean(b, findFourMostRecents(b)) - computeMean(a, findFourMostRecents(a)) || computeStdev(a) - computeStdev(b) || a.evaluations.length - b.evaluations.length
           });
+          sortTable(5, computeZ);
           setJudges(j);
         }
       }).catch(err => {
