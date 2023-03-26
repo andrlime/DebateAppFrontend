@@ -11,16 +11,27 @@ interface RoundTableProps {
     rdName: string;
     startTime: number;
     rounds: Array<Round>;
+    override: boolean;
+    overriddenRoom: string;
 }
 
 interface Round {
     flight: string;
     teamA: string;
     teamB: string;
-    judges: Array<{name: string, id: string}>
+    judges: Array<{name: string, id: string}>;
 }
 
-const RoundTableRow: React.FC<Round> = ({flight, teamA, teamB, judges}) => {
+interface RoundProps {
+    flight: string;
+    teamA: string;
+    teamB: string;
+    judges: Array<{name: string, id: string}>;
+    override: boolean;
+    overriddenRoom: string;
+}
+
+const RoundTableRow: React.FC<RoundProps> = ({flight, teamA, teamB, judges, overriddenRoom, override}) => {
     const [activeJudge, setActiveJudge] = useState<{name: string, id: string}>(judges[0]);
 
     return (
@@ -31,7 +42,7 @@ const RoundTableRow: React.FC<Round> = ({flight, teamA, teamB, judges}) => {
             </td>
             <td style={{padding: "0.25rem", border: "1px solid black", width: "14.2857%", fontFamily: "inherit", color: "black", textAlign: "center", whiteSpace: "nowrap"}}>{teamB}</td>
             {teamB !== "" ? <>
-                <td style={{padding: "0.25rem", border: "1px solid black", width: "16.6667%", fontFamily: "inherit", color: "black", textAlign: "center", whiteSpace: "nowrap"}}>{activeJudge.id}</td>
+                <td style={{padding: "0.25rem", border: "1px solid black", width: "16.6667%", fontFamily: "inherit", color: "black", textAlign: "center", whiteSpace: "nowrap"}}>{override ? overriddenRoom : activeJudge.id}</td>
                 <td style={{padding: "0.25rem", border: "1px solid black", width: "fit-content", fontFamily: "inherit", color: "black", textAlign: "center", whiteSpace: "nowrap"}}>{(judges).map((e,i) => (
                     <span key={e.id}><span className={pairStyles.judge} onClick={() => {
                         setActiveJudge(e);
@@ -49,38 +60,38 @@ const RoundTableRow: React.FC<Round> = ({flight, teamA, teamB, judges}) => {
     );
 }
 
-const SingleFlight: React.FC<{startTime: number, rounds: Array<Round>, flightNumber: number}> = ({startTime, rounds, flightNumber}) => {
+const SingleFlight: React.FC<{startTime: number, rounds: Array<Round>, flightNumber: number, override: boolean, overriddenRoom: string}> = ({startTime, rounds, flightNumber, override, overriddenRoom}) => {
     let bgc = flightNumber === 1 ? "#003A77" : "#4a1231";
     return (
-        <>
-            <div style={{fontWeight: "700", fontSize: "1.2rem", color: "black", display: "flex", justifyContent: "space-between"}}>
+        <div style={{display: "flex", flexDirection: "column", justifyContent: "center", width: "100%"}}>
+            <div style={{fontWeight: "700", fontSize: "1.2rem", color: "black", width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center"}}>
                 <span>Flight {flightNumber===1 ? "A" : "B"}</span>
                 <span style={{textAlign: "right"}}>Starts at {(startTime).toString().padStart(4, "0").substring(0,2) + ":" + (startTime).toString().padStart(4, "0").substring(2)}</span>
             </div>
-            <Table style={{marginTop: "0.1rem", marginBottom: "1rem", width: "100%", textAlign: "left", fontSize: "1.125rem", fontWeight: "bold", border: "1px solid black"}}>
+            <Table style={{marginTop: "0.1rem", marginBottom: "1rem", textAlign: "left", fontSize: "1.125rem", fontWeight: "bold", border: "1px solid black"}}>
                 <tr>
-                    <td style={{padding: "0.25rem", border: "1px solid black", backgroundColor: bgc, color: "white", fontWeight: "bold", width: "fit-content", textAlign: "center", whiteSpace: "nowrap"}}>Flight</td>
-                    <td style={{padding: "0.25rem", border: "1px solid black", backgroundColor: bgc, color: "white", fontWeight: "bold", width: "fit-content", textAlign: "center", whiteSpace: "nowrap"}}>Team A</td>
-                    <td style={{padding: "0.25rem", border: "1px solid black", backgroundColor: bgc, color: "white", fontWeight: "bold", width: "fit-content", textAlign: "center", whiteSpace: "nowrap"}}>Team B</td>
-                    <td style={{padding: "0.25rem", border: "1px solid black", backgroundColor: bgc, color: "white", fontWeight: "bold", width: "fit-content", textAlign: "center", whiteSpace: "nowrap"}}>Meeting ID</td>
+                    <td style={{padding: "0.25rem", border: "1px solid black", backgroundColor: bgc, color: "white", fontWeight: "bold", width: "fit-content", textAlign: "center", whiteSpace: "nowrap"}}><span style={{padding: "0.3rem"}}>Flight</span></td>
+                    <td style={{padding: "0.25rem", border: "1px solid black", backgroundColor: bgc, color: "white", fontWeight: "bold", width: "fit-content", textAlign: "center", whiteSpace: "nowrap"}}>Team</td>
+                    <td style={{padding: "0.25rem", border: "1px solid black", backgroundColor: bgc, color: "white", fontWeight: "bold", width: "fit-content", textAlign: "center", whiteSpace: "nowrap"}}>Team</td>
+                    <td style={{padding: "0.25rem", border: "1px solid black", backgroundColor: bgc, color: "white", fontWeight: "bold", width: "fit-content", textAlign: "center", whiteSpace: "nowrap"}}>Room</td>
                     <td style={{padding: "0.25rem", border: "1px solid black", backgroundColor: bgc, color: "white", fontWeight: "bold", width: "fit-content", textAlign: "center", whiteSpace: "nowrap"}}>Judges</td>
                 </tr>
                 {rounds.filter((a) => a.flight == `${flightNumber}`).map((e,i) => (
-                <RoundTableRow key={e.teamA + "" + e.teamB} flight={e.flight} teamA={e.teamA} teamB={e.teamB} judges={e.judges}/>
+                <RoundTableRow key={e.teamA + "" + e.teamB} flight={e.flight} teamA={e.teamA} teamB={e.teamB} judges={e.judges} override={override} overriddenRoom={overriddenRoom}/>
                 ))}
             </Table>
-        </>
+        </div>
     )
 }
 
-const RoundTable: React.FC<RoundTableProps> = ({divName, rdName, startTime, rounds}) => {
+const RoundTable: React.FC<RoundTableProps> = ({divName, rdName, startTime, rounds, override, overriddenRoom}) => {
     return (
-        <div style={{color: "#003A77", width: "60%", minWidth: "1000px", display: "flex", flexDirection: "column", textAlign: "center", padding: "1.25rem", whiteSpace: "nowrap"}} id="CONTAINER_TO_EXPORT">
+        <div style={{color: "#003A77", width: "75%", minWidth: "1000px", display: "flex", flexDirection: "column", textAlign: "center", padding: "1.25rem", whiteSpace: "nowrap"}} id="CONTAINER_TO_EXPORT">
             <div style={{fontFamily: `Georgia, "Times New Roman", Times, serif`, fontWeight: "bold", fontSize: "3rem"}}>{divName}</div>
             <div style={{fontFamily: `Georgia, "Times New Roman", Times, serif`, fontWeight: "bold", fontSize: "2rem"}}>{rdName}</div>
 
-            <SingleFlight startTime={startTime} flightNumber={1} rounds={rounds}/>
-            {rounds.filter(a => a.flight === "2").length > 0 ? <SingleFlight startTime={startTime + 100} flightNumber={2} rounds={rounds}/> : ""}
+            <SingleFlight startTime={startTime} flightNumber={1} rounds={rounds} override={override} overriddenRoom={overriddenRoom}/>
+            {rounds.filter(a => a.flight === "2").length > 0 ? <SingleFlight startTime={startTime + 100} flightNumber={2} rounds={rounds} override={override} overriddenRoom={overriddenRoom}/> : ""}
 
             <div style={{display: "flex", width: "100%", padding: "1rem"}}>
                 <img style={{width: "36%"}} alt={"Logo"} src={"/logo.png"}/>
@@ -97,6 +108,9 @@ export const DebatePair: React.FC = () => {
     const [rdName, setRdName] = useState("");
     const [stTime, setStTime] = useState<number | null>();
     const [rounds, setRounds] = useState<Array<Round>>([]);
+
+    const [override, setOverride] = useState(false);
+    const [overriddenId, setOverriddenId] = useState("");
 
     const exportAsPicture = () => {
         let data = document.getElementById('CONTAINER_TO_EXPORT')!
@@ -207,6 +221,13 @@ export const DebatePair: React.FC = () => {
                 </div>
             </div>
             <div style={{padding: "0.75rem", paddingTop: "0.125rem", paddingBottom: "0.125rem", display: "flex", flexDirection: "column"}}>
+                <span style={{fontWeight: "bold"}}>Need to force change the room code? Please only do this during a finals round.</span>
+                <div style={{display: "flex", flexDirection: "column"}}>
+                    <Switch checked={override} onChange={(e) => setOverride(e.currentTarget.checked)} label={'Override room ID?'} description={"Toggle to force change all meeting IDs"}/>
+                    {override ? <TextInput style={{width: "fit-content"}} value={overriddenId} onChange={(e) => setOverriddenId(e.currentTarget.value)} placeholder={"Overridden Room ID"}/> : ""}
+                </div>
+            </div>
+            <div style={{padding: "0.75rem", paddingTop: "0.125rem", paddingBottom: "0.125rem", display: "flex", flexDirection: "column"}}>
                 <span style={{fontWeight: "bold", color: "rgb(239 68 68)"}}>If you need to adjust a round&#39;s chair, please click that judge&#39;s name.</span>
             </div>
             <div style={{padding: "0.75rem", paddingTop: "0.125rem", paddingBottom: "0.125rem", display: "flex", flexDirection: "column"}}>
@@ -218,7 +239,7 @@ export const DebatePair: React.FC = () => {
             </div>
 
             {/* Show the table */}
-            {content === "" ? "" : <RoundTable divName={divName} rdName={rdName} startTime={stTime || 0} rounds={rounds}/>}
+            {content === "" ? "" : <RoundTable divName={divName} rdName={rdName} startTime={stTime || 0} rounds={rounds} override={override} overriddenRoom={overriddenId}/>}
         </div>
     );
 };
