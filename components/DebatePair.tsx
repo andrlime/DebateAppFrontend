@@ -80,7 +80,7 @@ const RoundTable: React.FC<RoundTableProps> = ({divName, rdName, startTime, roun
             <div style={{fontFamily: `Georgia, "Times New Roman", Times, serif`, fontWeight: "bold", fontSize: "2rem"}}>{rdName}</div>
 
             <SingleFlight startTime={startTime} flightNumber={1} rounds={rounds}/>
-            <SingleFlight startTime={startTime + 100} flightNumber={2} rounds={rounds}/>
+            {rounds.filter(a => a.flight === "2").length > 0 ? <SingleFlight startTime={startTime + 100} flightNumber={2} rounds={rounds}/> : ""}
 
             <div style={{display: "flex", width: "100%", padding: "1rem"}}>
                 <img style={{width: "36%"}} alt={"Logo"} src={"/logo.png"}/>
