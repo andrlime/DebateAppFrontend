@@ -13,6 +13,10 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
+    "@emotion/react": "^11.10.6",
+    "@mantine/core": "^6.0.4",
+    "@mantine/form": "^6.0.4",
+    "@mantine/hooks": "^6.0.4",
     "@mathigon/fermat": "^1.1.4",
     "airtable": "^0.11.5",
     "axios": "^1.2.0",
