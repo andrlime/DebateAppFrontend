@@ -32,7 +32,7 @@ interface RoundProps {
 }
 
 const RoundTableRow: React.FC<RoundProps> = ({flight, teamA, teamB, judges, overriddenRoom, override}) => {
-    const [activeJudge, setActiveJudge] = useState<{name: string, id: string}>(judges[0]);
+    const [activeJudge, setActiveJudge] = useState<{name: string, id: string}>(judges[0] || {name: "BYE", id: ""});
 
     return (
         <tr style={{alignItems: "center", fontWeight: "normal"}}>
@@ -41,7 +41,7 @@ const RoundTableRow: React.FC<RoundProps> = ({flight, teamA, teamB, judges, over
                 <span style={{margin: "0.25rem", padding: "0.5rem"}}>{teamA}</span>
             </td>
             <td style={{padding: "0.25rem", border: "1px solid black", width: "14.2857%", fontFamily: "inherit", color: "black", textAlign: "center", whiteSpace: "nowrap"}}>{teamB}</td>
-            {teamB !== "" ? <>
+            {judges.length > 0 ? <>
                 <td style={{padding: "0.25rem", border: "1px solid black", width: "16.6667%", fontFamily: "inherit", color: "black", textAlign: "center", whiteSpace: "nowrap"}}>{override ? overriddenRoom : activeJudge.id}</td>
                 <td style={{padding: "0.25rem", border: "1px solid black", width: "fit-content", fontFamily: "inherit", color: "black", textAlign: "center", whiteSpace: "nowrap"}}>{(judges).map((e,i) => (
                     <span key={e.id}><span className={pairStyles.judge} onClick={() => {
@@ -162,13 +162,26 @@ export const DebatePair: React.FC = () => {
         LINES = LINES.splice(1);
         const allRounds: Array<Round> = [];
         for(const L of LINES) {
-            let data = (L.substring(1, L.length-1)).split("\",\"");
+            let data = (L.substring(1, L.length-1)).split(",");
+            console.log(data);
 
             let currentRound: Round = {flight: "", teamA: "", teamB: "", judges: []};
+            let twoTeams = L.match(/\d{6}/g) || ["NO"];
+            if(twoTeams[0] == "NO") continue;
+
+            let offset = !(data[2] == twoTeams[0]) ? 1 : 0;
+
+            // clear all quotes
+            for(let i = 0; i < data.length; i ++) {
+                // remove all quotes from this datapoint
+                data[i] = data[i].replace("\"", "");
+                data[i].trim();
+            }
+
             if(data[1] === "BYE") { // is a bye
                 // easy, just define a blank round in flight 1
                 currentRound.flight = "1";
-                currentRound.teamA = data[3];
+                currentRound.teamA = twoTeams[0];
                 currentRound.teamB = "";
                 currentRound.judges = [{name: "", id: ""}];
             } else { // not a bye, parse normally
@@ -176,20 +189,26 @@ export const DebatePair: React.FC = () => {
                 if(!data[1]) continue;
 
                 // take simple meta data
-                currentRound.flight = (data[2].match(/\d/g)![0]) || "0";
-                currentRound.teamA = data[3];
-                currentRound.teamB = data[6];
+                currentRound.flight = (data[1+offset].match(/\d/g)![0]) || "0";
+                currentRound.teamA = twoTeams[0];
+                currentRound.teamB = twoTeams[1];
                 
                 // parse judges
                 let judges: Array<{name: string, id: string}> = [];
-                for(let i = 10; i < data.length; i ++) {
+                for(let i = 9; i < data.length - 2; i += 2) {
                     // each element is now a judge
-                    if(data[i].length === 0) continue;
+                    if(!data[i]) continue;
 
-                    let d = data[i].split(", ");
-                    judges.push({name: d[1], id: d[0]});
+                    judges.push({name: data[i+1+offset].trim() || "BYE", id: data[i+offset]});
                     currentRound.judges = judges;
                 }
+
+                console.log(currentRound.judges);
+
+                if(!currentRound.judges) {
+                    currentRound.judges = [{name: "BYE", id: ""}];
+                }
+
             }
 
             allRounds.push(currentRound);
@@ -216,7 +235,7 @@ export const DebatePair: React.FC = () => {
                     <TextInput value={rdName} description={rdName} onChange={(event) => setRdName(event.currentTarget.value)} style={{margin: "0.25rem"}} label={"Round Name"} placeholder={"Round Name"} error={!rdName || rdName === "MANUALLY CHANGE" ? "Please enter the round name" : ""}/>
                     <NumberInput value={stTime || ""} max={2359} description={(stTime || "").toString().padStart(4, "0").substring(0,2) + ":" + (stTime || "").toString().padStart(4, "0").substring(2)} error={!stTime ? "Please enter the round start time" : ""} onChange={(event) => {
                         if(!event) setStTime(0);
-                        if(event < 2400 && event > 0) setStTime(event || 0);
+                        if(parseInt(event + "") < 2400 && parseInt(event + "") > 0) setStTime(event || 0);
                     }} style={{margin: "0.25rem"}} label={"Start Time"} placeholder={"Start Time"} hideControls/>
                 </div>
             </div>
