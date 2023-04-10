@@ -54,6 +54,14 @@ const Home: NextPage = () => {
           });
           sortTable(5, computeZ);
           setJudges(j);
+
+          for(let a of j) {
+            let inp = a.evaluations.reduce((acc, cur) => acc + (cur.isImprovement ? 1 : 0), 0);
+            if(inp > 1) {
+              console.log(a.name, a.evaluations);
+            }
+          }
+
         }
       }).catch(err => {
         setError(err);

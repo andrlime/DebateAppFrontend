@@ -54,9 +54,8 @@ export const CreateEvaluation: FunctionComponent<{callback: Function, judge: Jud
 
       //upload to database
       for(let ev of [...input]) {
-        console.log(ev);
         let body = {
-          tName: ev.isImprovement ? "Improvement Round" : ev.tournamentName,
+          tName: ev.isImprovement ? `Improvement Round #${impNumber}` : ev.tournamentName,
           dName: ev.isImprovement ? "N/A" : division,
           date: "",
           rName: ev.isImprovement ? `Improvement Round #${impNumber}` : `${ev.roundName}`, // e.g., Round 1 Flight A etc.
@@ -156,7 +155,7 @@ export const CreateEvaluation: FunctionComponent<{callback: Function, judge: Jud
       <div className={styles.createform}>
         <button onClick={(_) => {
           let body = {
-            tName: improvement ? "Improvement Round" : tournament,
+            tName: improvement ? `Improvement Round #${impNumber}` : tournament,
             dName: improvement ? "N/A" : division,
             rName: improvement ? `Improvement Round #${impNumber}` : `${round} Flight ${flight}`, // e.g., Round 1 Flight A etc.
             isPrelim: round.indexOf("Round")!=-1&&!improvement,
@@ -171,7 +170,7 @@ export const CreateEvaluation: FunctionComponent<{callback: Function, judge: Jud
           };
 
           callback({
-            tournamentName: improvement ? "Improvement Round" : tournament,
+            tournamentName: improvement ? `Improvement Round #${impNumber}` : tournament,
             divisionName: improvement ? "N/A" : division,
             date: "",
             roundName: improvement ? `Improvement Round #${impNumber}` : `${round} Flight ${flight}`, // e.g., Round 1 Flight A etc.
