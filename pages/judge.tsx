@@ -45,7 +45,6 @@ const Home: NextPage = () => {
         let j = (res.data.result);
         if(j.evaluations) {
           j.evaluations = j.evaluations.sort((b: Evaluation, a: Evaluation) => (new Date(a.date)).getFullYear() - (new Date(b.date)).getFullYear() || (new Date(a.date)).getMonth() - (new Date(b.date.toString())).getMonth() || (new Date(a.date.toString())).getDate() - (new Date(b.date.toString())).getDate() || (new Date(a.date.toString())).getHours() - (new Date(b.date.toString())).getHours() || (new Date(a.date.toString())).getMinutes() - (new Date(b.date.toString())).getMinutes());
-          j.evaluations.forEach((e: Evaluation) => console.log(new Date(e.date)));
           setJudge(j);
           setFilter(findFourMostRecents(j));
           setLoaded(true);
@@ -202,7 +201,7 @@ const Home: NextPage = () => {
                   <td style={rowCss}>{Math.round(100*computeMeanCitation(judge!, filter))/100}</td>
                   <td style={rowCss}>{Math.round(100*computeMeanCoverage(judge!, filter))/100}</td>
                   <td style={rowCss}>{Math.round(100*computeMeanBias(judge!, filter))/100}</td>
-                  <td style={rowCss}>{Math.round(100*computeMean(judge!, filter))/100}</td>
+                  <td style={rowCss}>{Math.round(1000*computeMean(judge!, filter))/1000}</td>
                   <td style={rowCss}></td>
 
                   </tr>

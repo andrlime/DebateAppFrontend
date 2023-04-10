@@ -85,6 +85,7 @@ export const computeZ = (judge: Judge, judges: Judge[]): number => {
 };
 
 export const computeMean = (j: Judge, f?: string[]): number => {
+  if(j.name.includes("Vijay")) console.log(j.name, f);
   // f is filters
   if (f) {
     // yes filters, only do the ones inside filters

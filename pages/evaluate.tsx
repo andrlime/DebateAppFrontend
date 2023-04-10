@@ -11,6 +11,7 @@ import NavigationBar from '../components/nav/NavigationMenu';
 import DeleteButton from '../components/buttons/DeleteButton';
 import { CreateJudge } from '../components/create/CreateJudge';
 import { useRouter } from 'next/router';
+import { Evaluation } from '../types/Evaluation';
 
 const Home: NextPage = () => {
   const { query } = useRouter();
@@ -116,6 +117,7 @@ const Home: NextPage = () => {
 
   const findFourMostRecents = (j: Judge) => {
     // this assues the judge is sorted as it should be in the axios response
+    j.evaluations = j.evaluations.sort((b: Evaluation, a: Evaluation) => (new Date(a.date)).getFullYear() - (new Date(b.date)).getFullYear() || (new Date(a.date)).getMonth() - (new Date(b.date.toString())).getMonth() || (new Date(a.date.toString())).getDate() - (new Date(b.date.toString())).getDate() || (new Date(a.date.toString())).getHours() - (new Date(b.date.toString())).getHours() || (new Date(a.date.toString())).getMinutes() - (new Date(b.date.toString())).getMinutes());
     let strings: string[] = [];
     let count = 0;
     const AMOUNT_I_WANT = 4;
