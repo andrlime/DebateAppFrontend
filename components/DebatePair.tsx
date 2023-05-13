@@ -13,6 +13,7 @@ interface RoundTableProps {
     rounds: Array<Round>;
     override: boolean;
     overriddenRoom: string;
+    showOffline: boolean
 }
 
 interface Round {
@@ -20,6 +21,7 @@ interface Round {
     teamA: string;
     teamB: string;
     judges: Array<{name: string, id: string}>;
+    offlineRoom: string;
 }
 
 interface RoundProps {
@@ -29,9 +31,11 @@ interface RoundProps {
     judges: Array<{name: string, id: string}>;
     override: boolean;
     overriddenRoom: string;
+    offlineRoom: string;
+    showOfflineRoom: boolean
 }
 
-const RoundTableRow: React.FC<RoundProps> = ({flight, teamA, teamB, judges, overriddenRoom, override}) => {
+const RoundTableRow: React.FC<RoundProps> = ({flight, teamA, teamB, judges, overriddenRoom, override, offlineRoom, showOfflineRoom}) => {
     const [activeJudge, setActiveJudge] = useState<{name: string, id: string}>(judges[0] || {name: "BYE", id: ""});
 
     return (
@@ -42,7 +46,7 @@ const RoundTableRow: React.FC<RoundProps> = ({flight, teamA, teamB, judges, over
             </td>
             <td style={{padding: "0.25rem", border: "1px solid black", width: "14.2857%", fontFamily: "inherit", color: "black", textAlign: "center", whiteSpace: "nowrap"}}>{teamB}</td>
             {judges.length > 0 ? <>
-                <td style={{padding: "0.25rem", border: "1px solid black", width: "16.6667%", fontFamily: "inherit", color: "black", textAlign: "center", whiteSpace: "nowrap"}}>{override ? overriddenRoom : activeJudge.id}</td>
+                <td style={{padding: "0.25rem", border: "1px solid black", width: "16.6667%", fontFamily: "inherit", color: "black", textAlign: "center", whiteSpace: "nowrap"}}>{override ? overriddenRoom : (showOfflineRoom? offlineRoom: activeJudge.id)}</td>
                 <td style={{padding: "0.25rem", border: "1px solid black", width: "fit-content", fontFamily: "inherit", color: "black", textAlign: "center", whiteSpace: "nowrap"}}>{(judges).map((e,i) => (
                     <span key={e.id}><span className={pairStyles.judge} onClick={() => {
                         setActiveJudge(e);
@@ -60,7 +64,7 @@ const RoundTableRow: React.FC<RoundProps> = ({flight, teamA, teamB, judges, over
     );
 }
 
-const SingleFlight: React.FC<{startTime: number, rounds: Array<Round>, flightNumber: number, override: boolean, overriddenRoom: string}> = ({startTime, rounds, flightNumber, override, overriddenRoom}) => {
+const SingleFlight: React.FC<{startTime: number, rounds: Array<Round>, flightNumber: number, override: boolean, overriddenRoom: string, showOffline: boolean}> = ({startTime, rounds, flightNumber, override, overriddenRoom, showOffline}) => {
     let bgc = flightNumber === 1 ? "#003A77" : "#4a1231";
     return (
         <div style={{display: "flex", flexDirection: "column", justifyContent: "center", width: "100%"}}>
@@ -77,21 +81,21 @@ const SingleFlight: React.FC<{startTime: number, rounds: Array<Round>, flightNum
                     <td style={{padding: "0.25rem", border: "1px solid black", backgroundColor: bgc, color: "white", fontWeight: "bold", width: "fit-content", textAlign: "center", whiteSpace: "nowrap"}}>Judges</td>
                 </tr>
                 {rounds.filter((a) => a.flight == `${flightNumber}`).map((e,i) => (
-                <RoundTableRow key={e.teamA + "" + e.teamB} flight={e.flight} teamA={e.teamA} teamB={e.teamB} judges={e.judges} override={override} overriddenRoom={overriddenRoom}/>
+                <RoundTableRow key={e.teamA + "" + e.teamB} flight={e.flight} teamA={e.teamA} teamB={e.teamB} judges={e.judges} override={override} overriddenRoom={overriddenRoom} offlineRoom={e.offlineRoom} showOfflineRoom={showOffline}/>
                 ))}
             </Table>
         </div>
     )
 }
 
-const RoundTable: React.FC<RoundTableProps> = ({divName, rdName, startTime, rounds, override, overriddenRoom}) => {
+const RoundTable: React.FC<RoundTableProps> = ({divName, rdName, startTime, rounds, override, overriddenRoom, showOffline}) => {
     return (
         <div style={{color: "#003A77", width: "75%", minWidth: "1000px", display: "flex", flexDirection: "column", textAlign: "center", padding: "1.25rem", whiteSpace: "nowrap"}} id="CONTAINER_TO_EXPORT">
             <div style={{fontFamily: `Georgia, "Times New Roman", Times, serif`, fontWeight: "bold", fontSize: "3rem"}}>{divName}</div>
             <div style={{fontFamily: `Georgia, "Times New Roman", Times, serif`, fontWeight: "bold", fontSize: "2rem"}}>{rdName}</div>
 
-            <SingleFlight startTime={startTime} flightNumber={1} rounds={rounds} override={override} overriddenRoom={overriddenRoom}/>
-            {rounds.filter(a => a.flight === "2").length > 0 ? <SingleFlight startTime={startTime + 100} flightNumber={2} rounds={rounds} override={override} overriddenRoom={overriddenRoom}/> : ""}
+            <SingleFlight startTime={startTime} flightNumber={1} rounds={rounds} override={override} overriddenRoom={overriddenRoom} showOffline={showOffline}/>
+            {rounds.filter(a => a.flight === "2").length > 0 ? <SingleFlight startTime={startTime + 100} flightNumber={2} rounds={rounds} override={override} overriddenRoom={overriddenRoom} showOffline={showOffline}/> : ""}
 
             <div style={{display: "flex", width: "100%", padding: "1rem"}}>
                 <img style={{width: "36%"}} alt={"Logo"} src={"/logo.png"}/>
@@ -111,6 +115,8 @@ export const DebatePair: React.FC = () => {
 
     const [override, setOverride] = useState(false);
     const [overriddenId, setOverriddenId] = useState("");
+
+    const [offline, setOffline] = useState(false);
 
     const exportAsPicture = () => {
         let data = document.getElementById('CONTAINER_TO_EXPORT')!
@@ -165,7 +171,7 @@ export const DebatePair: React.FC = () => {
             let data = (L.substring(1, L.length-1)).split(",");
             console.log(data);
 
-            let currentRound: Round = {flight: "", teamA: "", teamB: "", judges: []};
+            let currentRound: Round = {flight: "", teamA: "", teamB: "", judges: [], offlineRoom: ""};
             let twoTeams = L.match(/\d{6}/g) || ["NO"];
             if(twoTeams[0] == "NO") continue;
 
@@ -184,6 +190,7 @@ export const DebatePair: React.FC = () => {
                 currentRound.teamA = twoTeams[0];
                 currentRound.teamB = "";
                 currentRound.judges = [{name: "", id: ""}];
+                currentRound.offlineRoom = "BYE";
             } else { // not a bye, parse normally
                 // if undefined, continue
                 if(!data[1]) continue;
@@ -208,6 +215,9 @@ export const DebatePair: React.FC = () => {
                 if(!currentRound.judges) {
                     currentRound.judges = [{name: "BYE", id: ""}];
                 }
+
+                let offlineRoom = data[0+offset];
+                currentRound.offlineRoom = offlineRoom.replace("\"", "");;
 
             }
 
@@ -240,10 +250,10 @@ export const DebatePair: React.FC = () => {
                 </div>
             </div>
             <div style={{padding: "0.75rem", paddingTop: "0.125rem", paddingBottom: "0.125rem", display: "flex", flexDirection: "column"}}>
-                <span style={{fontWeight: "bold"}}>Need to force change the room code? Please only do this during a finals round.</span>
                 <div style={{display: "flex", flexDirection: "column"}}>
-                    <Switch checked={override} onChange={(e) => setOverride(e.currentTarget.checked)} label={'Override room ID?'} description={"Toggle to force change all meeting IDs"}/>
+                    <Switch checked={override} onChange={(e) => setOverride(e.currentTarget.checked)} label={'Override room ID?'} description={"Toggle to force change all meeting IDs for final rounds"}/>
                     {override ? <TextInput style={{width: "fit-content"}} value={overriddenId} onChange={(e) => setOverriddenId(e.currentTarget.value)} placeholder={"Overridden Room ID"}/> : ""}
+                    <Switch checked={offline} onChange={(e) => setOffline(e.currentTarget.checked)} label={'Show offline room?'} description={"Toggle to use offline room names instead of online room IDs"}/>
                 </div>
             </div>
             <div style={{padding: "0.75rem", paddingTop: "0.125rem", paddingBottom: "0.125rem", display: "flex", flexDirection: "column"}}>
@@ -258,7 +268,7 @@ export const DebatePair: React.FC = () => {
             </div>
 
             {/* Show the table */}
-            {content === "" ? "" : <RoundTable divName={divName} rdName={rdName} startTime={stTime || 0} rounds={rounds} override={override} overriddenRoom={overriddenId}/>}
+            {content === "" ? "" : <RoundTable divName={divName} rdName={rdName} startTime={stTime || 0} rounds={rounds} override={override} overriddenRoom={overriddenId} showOffline={offline}/>}
         </div>
     );
 };
