@@ -112,30 +112,40 @@ export const CreateEvaluation: FunctionComponent<{callback: Function, judge: Jud
         
       </div>
       <div className={styles.createform}>
-        <div style={{margin: "0.15rem"}}><NumberInput hideControls min={0} max={1.5} step={0.25} label={"decision"} value={dec} onChange={(e) => {
-          let number = e || 0;
-          setDec(number);
-        }} type={'number'}/></div>
-  
-        <div style={{margin: "0.15rem"}}><NumberInput hideControls min={0} max={1.5} step={0.25} label={"comparison"} value={comp} onChange={(e) => {
-          let number = e || 0;
-          setComp(number);
-        }} type={'number'}/></div>
-  
-        <div style={{margin: "0.15rem"}}><NumberInput hideControls min={0} max={1.5} step={0.25} label={"citation"} value={cit} onChange={(e) => {
-          let number = e || 0;
-          setCit(number);
-        }} type={'number'}/></div>
-  
-        <div style={{margin: "0.15rem"}}><NumberInput hideControls min={0} max={1.5} step={0.25} label={"coverage"} value={cov} onChange={(e) => {
-          let number = e || 0;
-          setCov(number);
-        }} type={'number'}/></div>
-  
-        <div style={{margin: "0.15rem"}}><NumberInput hideControls min={0} max={1.5} step={0.25} label={"bias"} value={bias} onChange={(e) => {
-          let number = e || 0;
-          setBias(number);
-        }} type={'number'}/></div>
+      <div style={{margin: "0.15rem"}}>Decision Score: <input value={dec} onChange={(e) => {
+          let number = parseFloat(e.target.value) || 0;
+          if (number > 1.5) setDec(1.5);
+          else if (number < 0) setDec(0);
+          else setDec(number);
+        }} type={'number'}></input></div>
+
+        <div style={{margin: "0.15rem"}}>Comparison Score: <input value={comp} onChange={(e) => {
+          let number = parseFloat(e.target.value) || 0;
+          if (number > 1.5) setComp(1.5);
+          else if (number < 0) setComp(0);
+          else setComp(number);
+        }} type={'number'}></input></div>
+
+        <div style={{margin: "0.15rem"}}>Citation Score: <input value={cit} onChange={(e) => {
+          let number = parseFloat(e.target.value) || 0;
+          if (number > 1.5) setCit(1.5);
+          else if (number < 0) setCit(0);
+          else setCit(number);
+        }} type={'number'}></input></div>
+
+        <div style={{margin: "0.15rem"}}>Coverage Score: <input value={cov} onChange={(e) => {
+          let number = parseFloat(e.target.value) || 0;
+          if (number > 1.5) setCov(1.5);
+          else if (number < 0) setCov(0);
+          else setCov(number);
+        }} type={'number'}></input></div>
+
+        <div style={{margin: "0.15rem"}}>Bias Score: <input value={bias} onChange={(e) => {
+          let number = parseFloat(e.target.value) || 0;
+          if (number > 1.5) setBias(1.5);
+          else if (number < 0) setBias(0);
+          else setBias(number);
+        }} type={'number'}></input></div>
       </div>
 
       <div className={styles.createform}>

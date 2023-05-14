@@ -12,8 +12,8 @@
   "author": "Andrew Li <54134293+andrewleaf22@users.noreply.github.com>",
   "license": "MIT",
   "dependencies": {
-    "@emotion/react": "^11.10.8",
-    "@mantine/core": "^6.0.9",
+    "@emotion/react": "^11.11.0",
+    "@mantine/core": "^6.0.10",
     "@mantine/form": "^6.0.9",
     "@mantine/hooks": "^6.0.9",
     "@mathigon/fermat": "^1.1.4",
@@ -44,5 +44,5 @@
     "eslint-config-next": "13.0.5",
     "typescript": "^4.9.3"
   },
-  "packageManager": "yarn@1.22.19"
+  "packageManager": "yarn@3.5.1"
 }
