@@ -116,7 +116,7 @@ export const DebatePair: React.FC = () => {
     const [override, setOverride] = useState(false);
     const [overriddenId, setOverriddenId] = useState("");
 
-    const [offline, setOffline] = useState(false);
+    const [offline, setOffline] = useState(true); // set to false after shanghai
 
     const exportAsPicture = () => {
         let data = document.getElementById('CONTAINER_TO_EXPORT')!
@@ -205,8 +205,12 @@ export const DebatePair: React.FC = () => {
                 for(let i = 9; i < data.length - 2; i += 2) {
                     // each element is now a judge
                     if(!data[i]) continue;
+                    if(data[i+offset].match(/\d/g)) {
+                        judges.push({name: data[i+1+offset].trim() || "BYE", id: data[i+offset]});
+                    } else {
+                        judges.push({name: `${data[i+1+offset].trim()} ${data[i+offset]}` || "BYE", id: "OFFLINE"});
+                    }
 
-                    judges.push({name: data[i+1+offset].trim() || "BYE", id: data[i+offset]});
                     currentRound.judges = judges;
                 }
 
