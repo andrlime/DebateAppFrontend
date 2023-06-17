@@ -149,7 +149,7 @@ export const DebatePair: React.FC = () => {
     const [override, setOverride] = useState(false);
     const [overriddenId, setOverriddenId] = useState("");
 
-    const [offline, setOffline] = useState(true); // set to false after shanghai
+    const [offline, setOffline] = useState(false); // set to false after shanghai
 
     const exportAsPicture = () => {
         let data = document.getElementById('CONTAINER_TO_EXPORT')!
@@ -188,6 +188,8 @@ export const DebatePair: React.FC = () => {
 
     useEffect(() => {
         let LINES = content.split('\n');
+        if(LINES.length < 1) return;
+
         const METADATA = LINES[0];
 
         const MD_RX = /\w+/g;
