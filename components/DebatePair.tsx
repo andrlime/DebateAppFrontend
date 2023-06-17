@@ -65,7 +65,40 @@ const RoundTableRow: React.FC<RoundProps> = ({flight, teamA, teamB, judges, over
 }
 
 const SingleFlight: React.FC<{startTime: number, rounds: Array<Round>, flightNumber: number, override: boolean, overriddenRoom: string, showOffline: boolean}> = ({startTime, rounds, flightNumber, override, overriddenRoom, showOffline}) => {
-    let bgc = flightNumber === 1 ? "#003A77" : "#4a1231";
+    let bgc = flightNumber === 1 ? "#003A77" : "#4A1231";
+    let filteredRounds = rounds.filter((a) => a.flight == `${flightNumber}`);
+    
+    let sortedRounds;
+
+    if (showOffline) {
+        // Sort by offlineRoom
+        sortedRounds = [...filteredRounds].sort((a, b) => {
+            if (a.offlineRoom === 'BYE') return 1;
+            if (b.offlineRoom === 'BYE') return -1;
+
+            return a.offlineRoom.localeCompare(b.offlineRoom);
+        });
+    } else {
+        // Sort by ID of the first judge
+        sortedRounds = [...filteredRounds].sort((a, b) => {
+            let aJudgeId = a.judges.length ? a.judges[0].id.replace(/-/g, '') : '';
+            let bJudgeId = b.judges.length ? b.judges[0].id.replace(/-/g, '') : '';
+
+            let aIsNumber = !isNaN(Number(aJudgeId));
+            let bIsNumber = !isNaN(Number(bJudgeId));
+
+            if (aIsNumber && bIsNumber) {
+                return Number(aJudgeId) - Number(bJudgeId);
+            }
+
+            if (aIsNumber) return -1;
+            if (bIsNumber) return 1;
+
+            return aJudgeId.localeCompare(bJudgeId);
+        });
+    }
+      
+    
     return (
         <div style={{display: "flex", flexDirection: "column", justifyContent: "center", width: "100%"}}>
             <div style={{fontWeight: "700", fontSize: "1.2rem", color: "black", width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center"}}>
@@ -80,7 +113,7 @@ const SingleFlight: React.FC<{startTime: number, rounds: Array<Round>, flightNum
                     <td style={{padding: "0.25rem", border: "1px solid black", backgroundColor: bgc, color: "white", fontWeight: "bold", width: "fit-content", textAlign: "center", whiteSpace: "nowrap"}}>Room</td>
                     <td style={{padding: "0.25rem", border: "1px solid black", backgroundColor: bgc, color: "white", fontWeight: "bold", width: "fit-content", textAlign: "center", whiteSpace: "nowrap"}}>Judges</td>
                 </tr>
-                {rounds.filter((a) => a.flight == `${flightNumber}`).map((e,i) => (
+                {sortedRounds.map((e,i) => (
                 <RoundTableRow key={e.teamA + "" + e.teamB} flight={e.flight} teamA={e.teamA} teamB={e.teamB} judges={e.judges} override={override} overriddenRoom={overriddenRoom} offlineRoom={e.offlineRoom} showOfflineRoom={showOffline}/>
                 ))}
             </Table>
@@ -116,7 +149,7 @@ export const DebatePair: React.FC = () => {
     const [override, setOverride] = useState(false);
     const [overriddenId, setOverriddenId] = useState("");
 
-    const [offline, setOffline] = useState(true); // set to false after shanghai
+    const [offline, setOffline] = useState(false); // set to false after shanghai
 
     const exportAsPicture = () => {
         let data = document.getElementById('CONTAINER_TO_EXPORT')!
@@ -155,6 +188,8 @@ export const DebatePair: React.FC = () => {
 
     useEffect(() => {
         let LINES = content.split('\n');
+        if(LINES.length < 1) return;
+
         const METADATA = LINES[0];
 
         const MD_RX = /\w+/g;
@@ -164,12 +199,27 @@ export const DebatePair: React.FC = () => {
         setDivName(D_NAME);
         setRdName(R_NAME);
 
+        if(R_NAME === "Round 1") {
+            setStTime(830);
+        }
+
+        if(R_NAME === "Round 2") {
+            setStTime(1100);
+        }
+
+        if(R_NAME === "Round 3") {
+            setStTime(1345);
+        }
+
+        if(R_NAME === "Round 4") {
+            setStTime(1615);
+        }
+
         // now we parse rounds
         LINES = LINES.splice(1);
         const allRounds: Array<Round> = [];
         for(const L of LINES) {
             let data = (L.substring(1, L.length-1)).split(",");
-            console.log(data);
 
             let currentRound: Round = {flight: "", teamA: "", teamB: "", judges: [], offlineRoom: ""};
             let twoTeams = L.match(/\d{6}/g) || ["NO"];
@@ -213,8 +263,6 @@ export const DebatePair: React.FC = () => {
 
                     currentRound.judges = judges;
                 }
-
-                console.log(currentRound.judges);
 
                 if(!currentRound.judges) {
                     currentRound.judges = [{name: "BYE", id: ""}];
