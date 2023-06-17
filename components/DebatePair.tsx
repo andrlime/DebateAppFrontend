@@ -106,7 +106,7 @@ const RoundTable: React.FC<RoundTableProps> = ({divName, rdName, startTime, roun
 
 export const DebatePair: React.FC = () => {
     const [file, setFile] = useState<File | null>(null);
-    const [content, setContent] = useState("");
+    // const [content, setContent] = useState("");
 
     const [divName, setDivName] = useState("");
     const [rdName, setRdName] = useState("");
@@ -148,88 +148,85 @@ export const DebatePair: React.FC = () => {
 
     useEffect(() => {
         if(!file) return;
-        file.text().then((res) => {
-            setContent(res);
-        })
-    }, [file]);
+        file.text().then((content) => {
+            console.log("AAAAA");
+            let LINES = content.split('\n');
+            const METADATA = LINES[0];
 
-    useEffect(() => {
-        let LINES = content.split('\n');
-        const METADATA = LINES[0];
+            const MD_RX = /\w+/g;
+            const MD_ARRAY = METADATA.match(MD_RX) || ["", ""];
+            const D_NAME = translate(MD_ARRAY[0], DIV_DICT);
+            const R_NAME = translate(MD_ARRAY[1], RD_DICT);
+            setDivName(D_NAME);
+            setRdName(R_NAME);
 
-        const MD_RX = /\w+/g;
-        const MD_ARRAY = METADATA.match(MD_RX) || ["", ""];
-        const D_NAME = translate(MD_ARRAY[0], DIV_DICT);
-        const R_NAME = translate(MD_ARRAY[1], RD_DICT);
-        setDivName(D_NAME);
-        setRdName(R_NAME);
+            // now we parse rounds
+            LINES = LINES.splice(1);
+            const allRounds: Array<Round> = [];
+            for(const L of LINES) {
+                let data = (L.substring(1, L.length-1)).split(",");
+                console.log(data);
 
-        // now we parse rounds
-        LINES = LINES.splice(1);
-        const allRounds: Array<Round> = [];
-        for(const L of LINES) {
-            let data = (L.substring(1, L.length-1)).split(",");
-            console.log(data);
+                let currentRound: Round = {flight: "", teamA: "", teamB: "", judges: [], offlineRoom: ""};
+                let twoTeams = L.match(/\d{6}/g) || ["NO"];
+                if(twoTeams[0] == "NO") continue;
 
-            let currentRound: Round = {flight: "", teamA: "", teamB: "", judges: [], offlineRoom: ""};
-            let twoTeams = L.match(/\d{6}/g) || ["NO"];
-            if(twoTeams[0] == "NO") continue;
+                let offset = !(data[2] == twoTeams[0]) ? 1 : 0;
 
-            let offset = !(data[2] == twoTeams[0]) ? 1 : 0;
+                // clear all quotes
+                for(let i = 0; i < data.length; i ++) {
+                    // remove all quotes from this datapoint
+                    data[i] = data[i].replace("\"", "");
+                    data[i].trim();
+                }
 
-            // clear all quotes
-            for(let i = 0; i < data.length; i ++) {
-                // remove all quotes from this datapoint
-                data[i] = data[i].replace("\"", "");
-                data[i].trim();
-            }
+                if(data[1] === "BYE") { // is a bye
+                    // easy, just define a blank round in flight 1
+                    currentRound.flight = "1";
+                    currentRound.teamA = twoTeams[0];
+                    currentRound.teamB = "";
+                    currentRound.judges = [{name: "", id: ""}];
+                    currentRound.offlineRoom = "BYE";
+                } else { // not a bye, parse normally
+                    // if undefined, continue
+                    if(!data[1]) continue;
 
-            if(data[1] === "BYE") { // is a bye
-                // easy, just define a blank round in flight 1
-                currentRound.flight = "1";
-                currentRound.teamA = twoTeams[0];
-                currentRound.teamB = "";
-                currentRound.judges = [{name: "", id: ""}];
-                currentRound.offlineRoom = "BYE";
-            } else { // not a bye, parse normally
-                // if undefined, continue
-                if(!data[1]) continue;
+                    // take simple meta data
+                    currentRound.flight = (data[1+offset].match(/\d/g)![0]) || "0";
+                    currentRound.teamA = twoTeams[0];
+                    currentRound.teamB = twoTeams[1];
+                    
+                    // parse judges
+                    let judges: Array<{name: string, id: string}> = [];
+                    for(let i = 9; i < data.length - 2; i += 2) {
+                        // each element is now a judge
+                        if(!data[i]) continue;
+                        if(data[i+offset].match(/\d/g)) {
+                            judges.push({name: data[i+1+offset].trim() || "BYE", id: data[i+offset]});
+                        } else {
+                            judges.push({name: `${data[i+1+offset].trim()} ${data[i+offset]}` || "BYE", id: "BYE"});
+                        }
 
-                // take simple meta data
-                currentRound.flight = (data[1+offset].match(/\d/g)![0]) || "0";
-                currentRound.teamA = twoTeams[0];
-                currentRound.teamB = twoTeams[1];
-                
-                // parse judges
-                let judges: Array<{name: string, id: string}> = [];
-                for(let i = 9; i < data.length - 2; i += 2) {
-                    // each element is now a judge
-                    if(!data[i]) continue;
-                    if(data[i+offset].match(/\d/g)) {
-                        judges.push({name: data[i+1+offset].trim() || "BYE", id: data[i+offset]});
-                    } else {
-                        judges.push({name: `${data[i+1+offset].trim()} ${data[i+offset]}` || "BYE", id: "BYE"});
+                        currentRound.judges = judges;
                     }
 
-                    currentRound.judges = judges;
+                    console.log(currentRound.judges);
+
+                    if(!currentRound.judges) {
+                        currentRound.judges = [{name: "BYE", id: ""}];
+                    }
+
+                    let offlineRoom = data[0+offset];
+                    currentRound.offlineRoom = offlineRoom.replace("\"", "");;
+
                 }
 
-                console.log(currentRound.judges);
-
-                if(!currentRound.judges) {
-                    currentRound.judges = [{name: "BYE", id: ""}];
-                }
-
-                let offlineRoom = data[0+offset];
-                currentRound.offlineRoom = offlineRoom.replace("\"", "");;
-
+                allRounds.push(currentRound);
             }
 
-            allRounds.push(currentRound);
-        }
-
-        setRounds(allRounds);
-    }, [content]);
+            setRounds(allRounds);
+        })
+    }, [file]);
 
     return (
         <div style={{padding: "0.75rem"}}>
@@ -272,7 +269,7 @@ export const DebatePair: React.FC = () => {
             </div>
 
             {/* Show the table */}
-            {content === "" ? "" : <RoundTable divName={divName} rdName={rdName} startTime={stTime || 0} rounds={rounds} override={override} overriddenRoom={overriddenId} showOffline={offline}/>}
+            {!rounds ? "" : <RoundTable divName={divName} rdName={rdName} startTime={stTime || 0} rounds={rounds} override={override} overriddenRoom={overriddenId} showOffline={offline}/>}
         </div>
     );
 };
