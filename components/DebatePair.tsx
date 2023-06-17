@@ -197,6 +197,22 @@ export const DebatePair: React.FC = () => {
         setDivName(D_NAME);
         setRdName(R_NAME);
 
+        if(R_NAME === "Round 1") {
+            setStTime(830);
+        }
+
+        if(R_NAME === "Round 2") {
+            setStTime(1100);
+        }
+
+        if(R_NAME === "Round 3") {
+            setStTime(1345);
+        }
+
+        if(R_NAME === "Round 4") {
+            setStTime(1615);
+        }
+
         // now we parse rounds
         LINES = LINES.splice(1);
         const allRounds: Array<Round> = [];
