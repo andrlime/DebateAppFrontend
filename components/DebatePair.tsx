@@ -220,9 +220,10 @@ export const DebatePair: React.FC = () => {
         const allRounds: Array<Round> = [];
         for(const L of LINES) {
             let data = (L.substring(1, L.length-1)).split(",");
+            console.log(data);
 
             let currentRound: Round = {flight: "", teamA: "", teamB: "", judges: [], offlineRoom: ""};
-            let twoTeams = L.match(/\d{6}/g) || ["NO"];
+            let twoTeams = L.match(/\d{6,9}/g) || ["NO"];
             if(twoTeams[0] == "NO") continue;
 
             let offset = !(data[2] == twoTeams[0]) ? 1 : 0;
@@ -247,8 +248,8 @@ export const DebatePair: React.FC = () => {
 
                 // take simple meta data
                 currentRound.flight = (data[1+offset].match(/\d/g)![0]) || "0";
-                currentRound.teamA = twoTeams[0];
-                currentRound.teamB = twoTeams[1];
+                currentRound.teamA = twoTeams[0].replace("\"", "");
+                currentRound.teamB = (twoTeams[1] || "").replace("\"", "");
                 
                 // parse judges
                 let judges: Array<{name: string, id: string}> = [];
@@ -256,9 +257,9 @@ export const DebatePair: React.FC = () => {
                     // each element is now a judge
                     if(!data[i]) continue;
                     if(data[i+offset].match(/\d/g)) {
-                        judges.push({name: data[i+1+offset].trim() || "BYE", id: data[i+offset]});
+                        judges.push({name: data[i+1+offset].replace("\"", "").trim() || "BYE", id: data[i+offset].replace("\"", "")});
                     } else {
-                        judges.push({name: `${data[i+1+offset].trim()} ${data[i+offset]}` || "BYE", id: "BYE"});
+                        judges.push({name: `${data[i+1+offset].replace("\"", "").trim()} ${data[i+offset].replace("\"", "")}` || "BYE", id: "BYE"});
                     }
 
                     currentRound.judges = judges;
