@@ -220,7 +220,6 @@ export const DebatePair: React.FC = () => {
         const allRounds: Array<Round> = [];
         for(const L of LINES) {
             let data = (L.substring(1, L.length-1)).split(",");
-            console.log(data);
 
             let currentRound: Round = {flight: "", teamA: "", teamB: "", judges: [], offlineRoom: ""};
             let twoTeams = L.match(/\d{6,9}/g) || ["NO"];
