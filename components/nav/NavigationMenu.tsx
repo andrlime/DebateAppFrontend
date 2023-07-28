@@ -8,11 +8,11 @@ import styles from '../../styles/Q.module.css';
  */
 const toolbox: NavigationItem[] = [
     {name: "Pairings Generator", description: "Generate pairings image from horizontal schematic", link: "/pair", auth: true},
-    {name: "Results Image Generator", description: "Generator results as an image", link: "/results", auth: true},
-    {name: "Results Spreadsheet Generator", description: "Generate results for a given division as a csv file", link: "/resultscsv", auth: true},
-    {name: "Tabroom Import Spreadsheet Convertor", description: "Convert DLC namelist to Tabroom format spreadsheet", link: "/tabroom", auth: true},
-    {name: "Evaluate Judges", description: "Judge evaluation system", link: "/evaluate", auth: true},
-    {name: "View Paradigms", description: "See judge paradigms", link: "/paradigms", auth: false}
+    //{name: "Results Image Generator", description: "Generator results as an image", link: "/results", auth: true},
+    //{name: "Results Spreadsheet Generator", description: "Generate results for a given division as a csv file", link: "/resultscsv", auth: true},
+    //{name: "Tabroom Import Spreadsheet Convertor", description: "Convert DLC namelist to Tabroom format spreadsheet", link: "/tabroom", auth: true},
+    //{name: "Evaluate Judges", description: "Judge evaluation system", link: "/evaluate", auth: true},
+    //{name: "View Paradigms", description: "See judge paradigms", link: "/paradigms", auth: false}
 ];
 
 /** (2)
