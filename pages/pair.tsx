@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Head from 'next/head';
 import styles from '../styles/Q.module.css';
 import NavigationBar from '../components/nav/NavigationMenu';
-import DebatePair from '../components/DebatePair';
+import DebatePair from '../components/GeneratePairings';
 
 const Home: NextPage = () => {
   return (
